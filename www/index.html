@@ -13,12 +13,24 @@
 
 <body>
   <!-- 地図を表示するブロック要素 -->
-  <div id="mymap" style="width:600px;height:480px;"></div>
+  <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
 
   <script>
 
+      var mymap = L.map("mymap");
+
     /* 緯度・経度と倍率の指定 */
-    var mymap = L.map("mymap").setView([43.05595115422, 141.37970483779569], 16);
+    function onLocationFound(e) {
+        L.map("mymap").setView([e.latlng.lat, e.latlng.lng], 18);
+        L.marker([e.latlng.lat,e.latlng.lng]).addTo(mymap);
+    }
+    function onLocationError(e) {
+        alert('error!' + e.message);
+    }
+    mymap.on('locationfound', onLocationFound);
+    mymap.on('locationerror', onLocationError);
+
+    mymap.locate({setView: true, maxZoom: 18, timeout: 5000});
 
     /* 地図タイルとクレジット表示 */
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
