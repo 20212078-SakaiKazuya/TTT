@@ -12,15 +12,13 @@
 </head>
 
 <body>
-
-
   <!-- 地図を表示するブロック要素 -->
-  <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+  <div id="mymap" style="width:600px;height:480px;"></div>
 
   <script>
 
     /* 緯度・経度と倍率の指定 */
-    var mymap = L.map("mymap").setView([35.159399, 136.987255], 18);
+    var mymap = L.map("mymap").setView([43.05595115422, 141.37970483779569], 16);
 
     /* 地図タイルとクレジット表示 */
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -38,11 +36,11 @@
     			"geometry":
     				{
     					"type": "Point",
-    					"coordinates": [136.987255, 35.159399]
+    					"coordinates": [141.37970483779569, 43.05595115422]
     				},
     			"properties":
     				{
-    					"name": "椙山女学園大学",
+    					"name": "北海道情報専門学校",
     				}
     		},
     		{
@@ -74,23 +72,8 @@
         "<p>緯度:" + e.latlng.lat + " 経度:" + e.latlng.lng + "</p>"
       ).openOn(mymap);
     }
-
-    /* テスト処理 */
-    function onClickPin(e){
-        var marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(mymap);
-    }
     mymap.on("click", onMapClick)
 
-    function onLocationFound(e) {
-        L.map("mymap").setView([e.latlng.lat, e.latlng.lng], 18);
-    }
-    function onLocationError(e) {
-        alert('error!' + e.message);
-    }
-    mymap.on('locationfound', onLocationFound);
-    mymap.on('locationerror', onLocationError);
-
-    mymap.locate({setView: true, maxZoom: 16, timeout: 20000});
   </script>
 </body>
 
