@@ -6,9 +6,9 @@
   <!-- ページタイトル -->
   <title>オリジナルマップの作成</title>
   <!-- leaflet.css -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <!-- leaflet.js -->
-  <script src="https://unpkg.com/leaflet@1.3.1/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 </head>
 
 <body>
@@ -18,19 +18,32 @@
   <script>
 
       var mymap = L.map("mymap");
+      cnt = 0;
+
+    /* アイコンの設定 */
+    var genzai = L.icon({
+        iconUrl: 'images/30264.png',
+        iconRetinaUrl: 'images/30264.png',
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -50],
+    });
 
     /* 緯度・経度と倍率の指定 */
     function onLocationFound(e) {
-        L.map("mymap").setView([e.latlng.lat, e.latlng.lng], 18);
-        L.marker([e.latlng.lat,e.latlng.lng]).addTo(mymap);
+        mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+        L.marker(e.latlng,{icon: genzai}).addTo(mymap);
+        console.log(cnt);
+        cnt++;
     }
     function onLocationError(e) {
-        alert('error!' + e.message);
+        console.log('error!' + e.message);
     }
     mymap.on('locationfound', onLocationFound);
     mymap.on('locationerror', onLocationError);
 
-    mymap.locate({setView: true, maxZoom: 18, timeout: 5000});
+
+    mymap.locate({setView: true, maxZoom: 18, timeout: 10000});
 
     /* 地図タイルとクレジット表示 */
     L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
