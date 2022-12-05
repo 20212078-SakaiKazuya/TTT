@@ -30,14 +30,14 @@ header .container{
 /* ドロワーナビゲーションの必須スタイル */
 #nav{
     position: fixed;
-    left: -270px;
+    left: -100px;
     top: 0;
-    width: 270px;
+    width: 100px;
     height: 100%;
 }
 /* ドロワーが開かれた時のスタイル */
 .show{
-    transform: translate3d(-270px, 0, 0);
+    transform: translate3d(100px, 0, 0);
 }
 /* 開く・閉じるのアニメーション */
 #wrapper, #nav{

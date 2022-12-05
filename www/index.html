@@ -5,6 +5,8 @@
   <meta charset="UTF-8">
   <!-- ページタイトル -->
   <title>オリジナルマップの作成</title>
+  <link rel="stylesheet" href="css/drawer.css" />
+  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
   <!-- leaflet.css -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
   <!-- leaflet.js -->
@@ -12,12 +14,38 @@
 </head>
 
 <body>
-  <!-- 地図を表示するブロック要素 -->
-  <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+    <script>
+        $(document).ready(function(){
+            $('#open_nav').on('click', function(){
+                $('#wrapper, #nav').toggleClass('show');
+            });
+        });
+    </script>
 
-  <script>
+    <!-- 地図を表示するブロック要素 -->
+    <div id="wrapper">
+        <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
 
-      var mymap = L.map("mymap");
+        <div id="open_nav" class="hamburger" style="position:absolute;z-index:1000;">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyMAPult-BNE9NJgkstBcyuoEHw3jCJNG6qVC0krOuxA&s" alt=""></img>
+        </div>
+    </div>
+
+    <nav id="nav">
+        <ul>
+            <li>test1</li>
+            <li>test2</li>
+            <li>test3</li>
+        </ul>
+    </nav>
+
+    <div id="menu" style="position:absolute;">
+        
+    </div>
+
+    <script>
+
+      var mymap = L.map("mymap", {zoomControl: false});
       cnt = 0;
 
     /* アイコンの設定 */
@@ -32,6 +60,7 @@
     /* 緯度・経度と倍率の指定 */
     function onLocationFound(e) {
         mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+        L.control.zoom({position: 'topright'}).addTo(mymap);
         mark = L.marker(e.latlng,{icon: genzai}).addTo(mymap);
         mark._icon.id = 'mark';
         console.log(cnt);
