@@ -32,7 +32,8 @@
     /* 緯度・経度と倍率の指定 */
     function onLocationFound(e) {
         mymap.setView([e.latlng.lat, e.latlng.lng], 18);
-        L.marker(e.latlng,{icon: genzai}).addTo(mymap);
+        mark = L.marker(e.latlng,{icon: genzai}).addTo(mymap);
+        mark._icon.id = 'mark';
         console.log(cnt);
         cnt++;
     }
@@ -98,6 +99,25 @@
       ).openOn(mymap);
     }
     mymap.on("click", onMapClick)
+
+    var locat;
+
+    function navigate() {
+        document.getElementById("mark").style.transform = "rotate(" + -direction.value + "deg)";
+    }
+    document.addEventListener('deviceready', startCompass);
+    function startCompass() {
+        setInterval(getCompass, 500);
+    }
+
+    function getCompass() {
+        navigator.compass.getCurrentHeading(compassSuccess, compassError);
+    }
+
+    function compassSuccess(heading) {
+        locat = heading.magneticHeading.toFixed(2);
+        navigate();
+    }
 
   </script>
 </body>
