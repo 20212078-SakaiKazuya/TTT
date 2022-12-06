@@ -2,153 +2,152 @@
 <html>
 
 <head>
-  <meta charset="UTF-8">
-  <!-- ページタイトル -->
-  <title>オリジナルマップの作成</title>
-  <link rel="stylesheet" href="css/drawer.css" />
-  <script src="//code.jquery.com/jquery-3.4.1.min.js"></script>
-  <!-- leaflet.css -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
-  <!-- leaflet.js -->
-  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <meta charset="UTF-8">
+    <!-- ページタイトル -->
+    <title>オリジナルマップの作成</title>
+    <link rel="stylesheet" href="css/drawer.css" />
+    <!-- leaflet.css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+    <!-- leaflet.js -->
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
 </head>
 
 <body>
+
+    <!-- 地図を表示するブロック要素 -->
+    <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+
+    <div id="drawerNavi" class="overlay">
+        <div id="drawerClose"><span class="lineClose"></span></div>
+        <ul class="overlay-content">
+            <li><a href="#">MENU1</a></li>
+            <li><a href="#">MENU2</a></li>
+            <li><a href="#">MENU3</a></li>
+            <li><a href="#">MENU4</a></li>
+            <li><a href="#">MENU5</a></li>
+        </ul>
+    </div>
+
+    <button id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;">ドロワーを開く</button>
+
     <script>
-        $(document).ready(function(){
-            $('#open_nav').on('click', function(){
-                $('#wrapper, #nav').toggleClass('show');
-            });
+        document.getElementById('drawerOpen').addEventListener('click', () => {
+            document.getElementById("drawerNavi").style.width = "100%";
+        });
+
+        document.getElementById('drawerClose').addEventListener('click', () => {
+            document.getElementById("drawerNavi").style.width = "0%";
         });
     </script>
 
-    <!-- 地図を表示するブロック要素 -->
-    <div id="wrapper">
-        <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
-
-        <div id="open_nav" class="hamburger" style="position:absolute;z-index:1000;">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRyMAPult-BNE9NJgkstBcyuoEHw3jCJNG6qVC0krOuxA&s" alt=""></img>
-        </div>
-    </div>
-
-    <nav id="nav">
-        <ul>
-            <li>test1</li>
-            <li>test2</li>
-            <li>test3</li>
-        </ul>
-    </nav>
-
-    <div id="menu" style="position:absolute;">
-        
-    </div>
-
     <script>
+        var mymap = L.map("mymap", {
+            zoomControl: false
+        });
+        cnt = 0;
 
-      var mymap = L.map("mymap", {zoomControl: false});
-      cnt = 0;
+        /* アイコンの設定 */
+        var genzai = L.icon({
+            iconUrl: 'images/30264.png',
+            iconRetinaUrl: 'images/30264.png',
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -50],
+        });
 
-    /* アイコンの設定 */
-    var genzai = L.icon({
-        iconUrl: 'images/30264.png',
-        iconRetinaUrl: 'images/30264.png',
-        iconSize: [30, 30],
-        iconAnchor: [15, 30],
-        popupAnchor: [0, -50],
-    });
-
-    /* 緯度・経度と倍率の指定 */
-    function onLocationFound(e) {
-        mymap.setView([e.latlng.lat, e.latlng.lng], 18);
-        L.control.zoom({position: 'topright'}).addTo(mymap);
-        mark = L.marker(e.latlng,{icon: genzai}).addTo(mymap);
-        mark._icon.id = 'mark';
-        console.log(cnt);
-        cnt++;
-    }
-    function onLocationError(e) {
-        console.log('error!' + e.message);
-    }
-    mymap.on('locationfound', onLocationFound);
-    mymap.on('locationerror', onLocationError);
-
-
-    mymap.locate({setView: true, maxZoom: 18, timeout: 10000});
-
-    /* 地図タイルとクレジット表示 */
-    L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-        {
-          attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
+        /* 緯度・経度と倍率の指定 */
+        function onLocationFound(e) {
+            mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(mymap);
+            mark = L.marker(e.latlng, {
+                icon: genzai
+            }).addTo(mymap);
+            mark._icon.id = 'mark';
+            console.log(cnt);
+            cnt++;
         }
-    ).addTo(mymap);
 
-    /* マーカー表示 */
-    data = {
-    	"type": "FeatureCollection",
-    	"features": [
-    		{
-    			"type": "Feature",
-    			"geometry":
-    				{
-    					"type": "Point",
-    					"coordinates": [141.37970483779569, 43.05595115422]
-    				},
-    			"properties":
-    				{
-    					"name": "北海道情報専門学校",
-    				}
-    		},
-    		{
-    			"type": "Feature",
-    			"geometry":
-    				{
-    					"type": "Point",
-    					"coordinates": [136.985318, 35.162474]
-    				},
-    			"properties":
-    				{
-    					"name": "星ヶ丘駅",
-    				}
-    		}
-    	]
-    }
+        function onLocationError(e) {
+            console.log('error!' + e.message);
+        }
+        mymap.on('locationfound', onLocationFound);
+        mymap.on('locationerror', onLocationError);
 
-    /* GeoJSONの読込 */
-    L.geoJSON(data, {
-      onEachFeature: function(feature, layer){
-        layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>");
-      }
-    }).addTo(mymap);
 
-    /* イベント処理 */
-    var popup = L.popup();
-    function onMapClick(e){
-      popup.setLatLng(e.latlng).setContent(
-        "<p>緯度:" + e.latlng.lat + " 経度:" + e.latlng.lng + "</p>"
-      ).openOn(mymap);
-    }
-    mymap.on("click", onMapClick)
+        mymap.locate({
+            setView: true,
+            maxZoom: 18,
+            timeout: 10000
+        });
 
-    var locat;
+        /* 地図タイルとクレジット表示 */
+        L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors"
+        }).addTo(mymap);
 
-    function navigate() {
-        document.getElementById("mark").style.transform = "rotate(" + -direction.value + "deg)";
-    }
-    document.addEventListener('deviceready', startCompass);
-    function startCompass() {
-        setInterval(getCompass, 500);
-    }
+        /* マーカー表示 */
+        data = {
+            "type": "FeatureCollection",
+            "features": [{
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [141.37970483779569, 43.05595115422]
+                },
+                "properties": {
+                    "name": "北海道情報専門学校",
+                }
+            }, {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": [136.985318, 35.162474]
+                },
+                "properties": {
+                    "name": "星ヶ丘駅",
+                }
+            }]
+        }
 
-    function getCompass() {
-        navigator.compass.getCurrentHeading(compassSuccess, compassError);
-    }
+        /* GeoJSONの読込 */
+        L.geoJSON(data, {
+            onEachFeature: function(feature, layer) {
+                layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>");
+            }
+        }).addTo(mymap);
 
-    function compassSuccess(heading) {
-        locat = heading.magneticHeading.toFixed(2);
-        navigate();
-    }
+        /* イベント処理 */
+        var popup = L.popup();
 
-  </script>
+        function onMapClick(e) {
+            popup.setLatLng(e.latlng).setContent(
+                "<p>緯度:" + e.latlng.lat + " 経度:" + e.latlng.lng + "</p>"
+            ).openOn(mymap);
+        }
+        mymap.on("click", onMapClick)
+
+        var locat;
+
+        function navigate() {
+            document.getElementById("mark").style.transform = "rotate(" + -direction.value + "deg)";
+        }
+        document.addEventListener('deviceready', startCompass);
+
+        function startCompass() {
+            setInterval(getCompass, 500);
+        }
+
+        function getCompass() {
+            navigator.compass.getCurrentHeading(compassSuccess, compassError);
+        }
+
+        function compassSuccess(heading) {
+            locat = heading.magneticHeading.toFixed(2);
+            navigate();
+        }
+    </script>
 </body>
 
 </html>

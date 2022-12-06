@@ -1,45 +1,84 @@
-/* This is a CSS file */
-@charset "utf-8";
+.overlay {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0, 0.9);
+  overflow-x: hidden;
+  transition: 0.5s;
+}
 
-.container{
-    max-width: 100%;
-}
-img{
-    max-width: 100%;
-}
-/* ヘッダーにボタンを配置 */
-.header{
-    padding: 16px 0;
-}
-header .container{
-    display: flex;
-    justify-content: space-between;
-}
-.title-block{
-    flex: 1 1 auto;
-}
-.hamburger{
-    flex: 0 0 32px;
-    align-self: center;
-    margin-left: 16px;
+#drawerNavi ul.overlay-content {
+    padding: 0;
+    list-style: none;
+    border: none;
+    position: absolute;
+    width: 100%;
     text-align: center;
-    color: #fff;
+    top: 50%;
+    transform: translateY(-50%);
+}
+ul.overlay-content li {
+    padding: 0;
+}
+.overlay-content li a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 1.9rem;
+    color: #707070;
+    display: block;
+    transition: 0.3s;
 }
 
-/* 機能の実装に必要なCSS */
-/* ドロワーナビゲーションの必須スタイル */
-#nav{
-    position: fixed;
-    left: -100px;
-    top: 0;
-    width: 100px;
-    height: 100%;
+.overlay-content li a:hover, .overlay-content li a:focus {
+  color: #f1f1f1;
 }
-/* ドロワーが開かれた時のスタイル */
-.show{
-    transform: translate3d(100px, 0, 0);
+
+/* close */
+#drawerClose {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+  cursor: pointer;
 }
-/* 開く・閉じるのアニメーション */
-#wrapper, #nav{
-    transition: transform 0.3s;
+#drawerClose:hover {
+    opacity: 0.8;
+}
+
+.lineClose {
+    display: inline-block;
+    vertical-align: middle;
+    color: #FFF;
+    line-height: 1;
+    width: 2.5rem;
+    height: 0.2rem;
+    background: currentColor;
+    border-radius: 0.1rem;
+    position: relative;
+    transform: rotate(45deg);
+}
+.lineClose::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  border-radius: inherit;
+  transform: rotate(90deg);
+}
+
+@media screen and (max-width: 767px) {
+  .overlay-content li a {
+    font-size: 1.7rem;
+}
+  #drawerClose {
+    font-size: 40px;
+    top: 15px;
+    right: 35px;
+  }
 }
