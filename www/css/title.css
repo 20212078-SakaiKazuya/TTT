@@ -1,8 +1,18 @@
 /* This is a CSS file */
 @charset "utf-8";
 
-Link{
-    max-width: 100%;
+#background {
+    position: fixed;
+    left: 0; 
+    top: 0;
+    width: auto; 
+    min-width: 100%; 
+    height: auto;
+    min-height: 100%;
+    z-index: -1;
 }
-
-
+#background img {
+    position: relative;
+    width: 100%;
+    height: auto;
+}
