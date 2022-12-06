@@ -16,3 +16,22 @@
     width: 100%;
     height: auto;
 }
+#center{
+    padding-top: 350px;
+    position: fixed;
+    left: 0; 
+    top: 0;
+    width: auto; 
+    min-width: 100%; 
+    height: auto;
+    min-height: 100%;
+    z-index: -1;
+    text-align: center;
+}
+#center img{
+    background-image: rgba(0,0,0,1);
+}
+.snake{
+    height: 25%;
+    width: 25%;
+}
