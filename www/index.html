@@ -24,11 +24,10 @@
             <li><a href="#">MENU2</a></li>
             <li><a href="#">MENU3</a></li>
             <li><a href="#">MENU4</a></li>
-            <li><a href="#">MENU5</a></li>
         </ul>
     </div>
 
-    <button id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;">ドロワーを開く</button>
+    <img src="images/icon_indian.jpg" id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;width:20%;">
 
     <script>
         document.getElementById('drawerOpen').addEventListener('click', () => {
@@ -58,9 +57,6 @@
         /* 緯度・経度と倍率の指定 */
         function onLocationFound(e) {
             mymap.setView([e.latlng.lat, e.latlng.lng], 18);
-            L.control.zoom({
-                position: 'topright'
-            }).addTo(mymap);
             mark = L.marker(e.latlng, {
                 icon: genzai
             }).addTo(mymap);
