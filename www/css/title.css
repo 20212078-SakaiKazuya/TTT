@@ -16,18 +16,6 @@
     width: 100%;
     height: auto;
 }
-#center{
-    padding-top: 350px;
-    position: fixed;
-    left: 0; 
-    top: 0;
-    width: auto; 
-    min-width: 100%; 
-    height: auto;
-    min-height: 100%;
-    z-index: -1;
-    text-align: center;
-}
 #title{
     vertical-align: bottom;
     text-align: center;
@@ -101,4 +89,7 @@
   padding-top: 570px;
   -webkit-text-stroke: 0.8px#fff;
   font-family: 'Kosugi', sans-serif;
+  position: fixed; 
+  height: auto;
+  z-index: -1;
 }

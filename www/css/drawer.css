@@ -21,10 +21,10 @@
     transform: translateY(-50%);
 }
 ul.overlay-content li {
-    padding: 0;
+    padding: 0px;
 }
 .overlay-content li a {
-    padding: 8px;
+    padding: 15px;
     display: block;
     transition: 0.3s;
 }
