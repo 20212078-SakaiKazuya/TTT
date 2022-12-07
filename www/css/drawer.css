@@ -29,6 +29,9 @@ ul.overlay-content li {
     transition: 0.3s;
 }
 
+.overlay-content li a img {
+    width: 90%;
+}
 
 /* close */
 #drawerClose {
