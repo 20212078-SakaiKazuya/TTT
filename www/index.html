@@ -35,6 +35,8 @@
 
     <img src="images/snake_burger.png" id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;width:20%;">
 
+    <img src="images/current.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
+
     <script>
         document.getElementById('drawerOpen').addEventListener('click', () => {
             document.getElementById("drawerNavi").style.width = "60%";
@@ -46,10 +48,9 @@
     </script>
 
     <script>
-        var mymap = L.map("mymap", {
-            zoomControl: false
-        });
+        var mymap = L.map("mymap", {zoomControl: false});
         cnt = 0;
+        var marklatlng;
 
         /* アイコンの設定 */
         var genzai = L.icon({
@@ -62,11 +63,10 @@
 
         /* 緯度・経度と倍率の指定 */
         function onLocationFound(e) {
+            marklatlng = e.latlng;
             if (cnt == 0) {
                 mymap.setView([e.latlng.lat, e.latlng.lng], 18);
-                mark = L.marker(e.latlng, {
-                    icon: genzai
-                }).addTo(mymap);
+                mark = L.marker(e.latlng, {icon: genzai}).addTo(mymap);
                 mark._icon.id = 'mark';
             } else {
                 mark.setLatLng(e.latlng);
@@ -80,10 +80,7 @@
         }
 
         function locat() {
-            mymap.locate({
-                setView: false,
-                maxZoom: 18
-            });
+            mymap.locate({setView: false,maxZoom: 18});
         }
 
         window.addEventListener('load', start);
@@ -91,6 +88,11 @@
         function onLocationError(e) {}
         mymap.on('locationfound', onLocationFound);
         mymap.on('locationerror', onLocationError);
+
+        function currentLocation(){
+            mymap.setView(marklatlng, 18);
+        }
+
 
 
         /* 地図タイルとクレジット表示 */
@@ -136,13 +138,13 @@
 
         function onMapClick(e) {
             popup.setLatLng(e.latlng).setContent(
-                "<p>この場所にピンを立てますか？</p><br><button onclick='clickMarker();'>YES"
+                "<p>この場所にピンを立てますか？</p><br><button onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
             ).openOn(mymap);
         }
         mymap.on("click", onMapClick);
 
-        function clickMarker() {
-            console.log('hey');
+        function clickMarker(la,ln) {
+            L.marker([la, ln]).addTo(mymap);
         }
     </script>
 </body>
