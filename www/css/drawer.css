@@ -17,14 +17,14 @@
     position: absolute;
     width: 100%;
     text-align: center;
-    top: 50%;
+    top: 30%;
     transform: translateY(-50%);
 }
 ul.overlay-content li {
     padding: 0px;
 }
 .overlay-content li a {
-    padding: 15px;
+    padding: 30px;
     display: block;
     transition: 0.3s;
 }
