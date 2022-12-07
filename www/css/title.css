@@ -33,11 +33,6 @@
     text-align: center;
     color: #536EFE;
 }
-/*フォント変更*/
-@font-face{
-    font-family: 'Kosugi';
-    src: url('https://fonts.googleapis.com/css?family=Kosugi');
-}
 @keyframes updown-anim{
   0%{
     transform: translateY(110%); /*表示範囲外から*/
@@ -97,11 +92,13 @@
 
 /*** 装飾用 ***/
 .updown{
-  font-weight: Bold;
+  width: 600px;
+  font-weight: 900;
+  text-shadow: .5px .5px #536EFE;
   font-size: 1.7rem;
-  margin: 5rem;
+  margin: 4.5rem;
   text-align: center;
-  padding-top: 550px;
+  padding-top: 570px;
   -webkit-text-stroke: 0.8px#fff;
-  font-family: Kosugi;
+  font-family: 'Kosugi', sans-serif;
 }
