@@ -136,10 +136,14 @@
 
         function onMapClick(e) {
             popup.setLatLng(e.latlng).setContent(
-                "<p>緯度:" + e.latlng.lat + " 経度:" + e.latlng.lng + "</p>"
+                "<p>この場所にピンを立てますか？</p><br><button onclick='clickMarker();'>YES"
             ).openOn(mymap);
         }
-        mymap.on("click", onMapClick)
+        mymap.on("click", onMapClick);
+
+        function clickMarker() {
+            console.log('hey');
+        }
     </script>
 </body>
 
