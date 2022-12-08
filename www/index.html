@@ -50,7 +50,7 @@
 
     <script>
         var mymap = L.map("mymap", {zoomControl: false});
-        cnt = 0;
+        first = 0;
         var marklatlng;
 
         /* アイコンの設定 */
@@ -65,18 +65,17 @@
         /* 緯度・経度と倍率の指定 */
         function onLocationFound(e) {
             marklatlng = e.latlng;
-            if (cnt == 0) {
+            if (first == 0) {
                 mymap.setView([e.latlng.lat, e.latlng.lng], 18);
                 mark = L.marker(e.latlng, {icon: genzai}).addTo(mymap);
                 mark._icon.id = 'mark';
+                first++;
             } else {
                 mark.setLatLng(e.latlng);
             }
-            cnt++;
         }
 
         function start() {
-            console.log('hello');
             setInterval(locat, 1000);
         }
 
@@ -136,18 +135,28 @@
 
         /* イベント処理 */
         var popup = L.popup();
+        var chk = false;
 
         function onMapClick(e) {
-            newPin = popup.setLatLng(e.latlng).setContent(
-                "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
-            ).openOn(mymap);
+            if(!chk) {
+                newPop = popup.setLatLng(e.latlng).setContent(
+                    "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
+                ).openOn(mymap);
+                chk = true;
+            } else {
+                chk = false;
+            }
         }
 
         mymap.on('click', onMapClick);
 
         function clickMarker(la,ln) {
-            L.marker([la, ln]).addTo(mymap);
-            newPin.remove();
+            newPin = L.marker([la, ln]).addTo(mymap);
+            newPop.remove();
+
+            newPin.bindPopup("<div style='width:200px'>新規ピン</</div>");
+
+            chk = false;
         }
     </script>
 </body>
