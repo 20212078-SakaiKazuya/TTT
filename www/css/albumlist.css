@@ -12,13 +12,12 @@
     z-index: -1;
 }
 .parent1{
+    font-size: 18.4px;
     background: yellow;
     text-align: center;
     font-family: 'Kosugi', sans-serif;
 }
-h1::after{
-    content: url("../images/album_img.png");
-}
+
 .parent3{
     position: relative;
     top: 498px;
