@@ -1,10 +1,13 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="css/pinlist.css">
     <link rel="stylesheet" href="components/loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Kosugi&display=swap'); </style>
     <script src="components/loader.js"></script>
     <script>
         //
@@ -13,15 +16,27 @@
     </script>
 </head>
 <body>
-    <a href="index.html"><h1 id="pintext">ピンの一覧</h1></a>
-    
-    <table>
-    <tr class="menu_item">
-        <a href="curry.html"><img src="images/currymark.png"></a>
-        <a href="album.html"><img src="images/albummark.png"></a>
-    </tr>
-</table>
-
-
+    <div class="home">
+        <div class="parent1">
+            <div class="header">
+                <a href="index.html"><h1 id="pintext">ピン一覧📍</h1></a>
+            </div>
+        </div>
+        <div class="parent2">
+            <div class="body">
+                <p>ピンピン</p>
+            </div>
+        </div>
+        <div class="parent3">
+            <div class="footer">
+                <table class="menu-item">
+                    <tr class="items">
+                        <td><a href="curry.html"><img src="images/currymark.png"></a></td>
+                        <td><a href="album.html"><img src="images/albummark.png"></a></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
