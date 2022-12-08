@@ -1,0 +1,6 @@
+.leaflet-popup-content {
+    font-size: 3em !important;
+}
+.leaflet-popup-content button {
+    font-size: 30px;
+}

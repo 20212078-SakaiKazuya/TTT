@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <!-- ページタイトル -->
     <title>オリジナルマップの作成</title>
+    <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/drawer.css" />
     <!-- leaflet.css -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
@@ -35,7 +36,7 @@
 
     <img src="images/snake_burger.png" id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;width:20%;">
 
-    <img src="images/current.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
+    <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
 
     <script>
         document.getElementById('drawerOpen').addEventListener('click', () => {
@@ -129,7 +130,7 @@
         /* GeoJSONの読込 */
         L.geoJSON(data, {
             onEachFeature: function(feature, layer) {
-                layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>");
+                layer.bindPopup("<div style='width:200px'>" + feature.properties.name + "</div>");
             }
         }).addTo(mymap);
 
@@ -137,14 +138,16 @@
         var popup = L.popup();
 
         function onMapClick(e) {
-            popup.setLatLng(e.latlng).setContent(
-                "<p>この場所にピンを立てますか？</p><br><button onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
+            newPin = popup.setLatLng(e.latlng).setContent(
+                "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
             ).openOn(mymap);
         }
-        mymap.on("click", onMapClick);
+
+        mymap.on('click', onMapClick);
 
         function clickMarker(la,ln) {
             L.marker([la, ln]).addTo(mymap);
+            newPin.remove();
         }
     </script>
 </body>
