@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    
+
     <!-- 地図を表示するブロック要素 -->
     <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
 
@@ -30,9 +30,11 @@
                 <a href="curry.html"><img src="images/bookmark.png"></a>
             </li>
             <li>
-                <a href="pin.html"><img src="images/pin.png"> </a></li>
+                <a href="pin.html"><img src="images/pin.png"> </a>
+            </li>
             <li>
-                <a href="album.html"><img src="images/album.png"> </a></li>
+                <a href="album.html"><img src="images/album.png"> </a>
+            </li>
             <li>
                 <a href="#"></a>
             </li>
@@ -43,127 +45,172 @@
 
     <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
 
-    <script>
-        document.getElementById('drawerOpen').addEventListener('click', () => {
-            document.getElementById("drawerNavi").style.width = "60%";
-        });
+    <img src="images/indian.png" style="position:absolute;bottom:0;left:0;z-index:1000;width:20%;">
+    <div id="meteo" style="position:absolute;bottom:20px;right:10px;z-index:1000; background-color:white; width:70%; height:10%; font-size:50px;">
 
-        document.getElementById('drawerClose').addEventListener('click', () => {
-            document.getElementById("drawerNavi").style.width = "0%";
-        });
-    </script>
+        <script>
+            document.getElementById('drawerOpen').addEventListener('click', () => {
+                document.getElementById("drawerNavi").style.width = "60%";
+            });
 
-    <script>
-        var mymap = L.map("mymap", {zoomControl: false});
-        first = 0;
-        var marklatlng;
+            document.getElementById('drawerClose').addEventListener('click', () => {
+                document.getElementById("drawerNavi").style.width = "0%";
+            });
+        </script>
 
-        /* アイコンの設定 */
-        var genzai = L.icon({
-            iconUrl: 'images/30264.png',
-            iconRetinaUrl: 'images/30264.png',
-            iconSize: [30, 30],
-            iconAnchor: [15, 30],
-            popupAnchor: [0, -50],
-        });
+        <script>
+            var mymap = L.map("mymap", {
+                zoomControl: false
+            });
+            first = 0;
+            var marklatlng;
 
-        /* 緯度・経度と倍率の指定 */
-        function onLocationFound(e) {
-            marklatlng = e.latlng;
-            if (first == 0) {
-                mymap.setView([e.latlng.lat, e.latlng.lng], 18);
-                mark = L.marker(e.latlng, {icon: genzai}).addTo(mymap);
-                mark._icon.id = 'mark';
-                first++;
-            } else {
-                mark.setLatLng(e.latlng);
-            }
-        }
+            /* アイコンの設定 */
+            var genzai = L.icon({
+                iconUrl: 'images/30264.png',
+                iconRetinaUrl: 'images/30264.png',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+                popupAnchor: [0, -50],
+            });
 
-        function start() {
-            setInterval(locat, 1000);
-        }
-
-        function locat() {
-            mymap.locate({setView: false,maxZoom: 18});
-        }
-
-        window.addEventListener('load', start);
-
-        function onLocationError(e) {}
-        mymap.on('locationfound', onLocationFound);
-        mymap.on('locationerror', onLocationError);
-
-        function currentLocation(){
-            mymap.setView(marklatlng, 18);
-        }
-
-
-
-        /* 地図タイルとクレジット表示 */
-        L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors",
-            maxZoom: 20,
-            maxNativeZoom: 18
-        }).addTo(mymap);
-
-        /* マーカー表示 */
-        data = {
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [141.37970483779569, 43.05595115422]
-                },
-                "properties": {
-                    "name": "北海道情報専門学校",
+            /* 緯度・経度と倍率の指定 */
+            function onLocationFound(e) {
+                marklatlng = e.latlng;
+                if (first == 0) {
+                    mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+                    mark = L.marker(e.latlng, {
+                        icon: genzai
+                    }).addTo(mymap);
+                    mark._icon.id = 'mark';
+                    first++;
+                } else {
+                    mark.setLatLng(e.latlng);
                 }
-            }, {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [136.985318, 35.162474]
-                },
-                "properties": {
-                    "name": "星ヶ丘駅",
-                }
-            }]
-        }
-
-        /* GeoJSONの読込 */
-        L.geoJSON(data, {
-            onEachFeature: function(feature, layer) {
-                layer.bindPopup("<div style='width:200px'>" + feature.properties.name + "</div>");
             }
-        }).addTo(mymap);
 
-        /* イベント処理 */
-        var popup = L.popup();
-        var chk = false;
+            function start() {
+                setInterval(locat, 1000);
+            }
 
-        function onMapClick(e) {
-            if(!chk) {
-                newPop = popup.setLatLng(e.latlng).setContent(
-                    "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
-                ).openOn(mymap);
-                chk = true;
-            } else {
+            function locat() {
+                mymap.locate({
+                    setView: false,
+                    maxZoom: 18
+                });
+            }
+
+            window.addEventListener('load', start);
+
+            function onLocationError(e) {}
+            mymap.on('locationfound', onLocationFound);
+            mymap.on('locationerror', onLocationError);
+
+            function currentLocation() {
+                mymap.setView(marklatlng, 18);
+            }
+
+
+
+            /* 地図タイルとクレジット表示 */
+            L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+                attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors",
+                maxZoom: 20,
+                maxNativeZoom: 18
+            }).addTo(mymap);
+
+            /* マーカー表示 */
+            data = {
+                "type": "FeatureCollection",
+                "features": [{
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [141.37970483779569, 43.05595115422]
+                    },
+                    "properties": {
+                        "name": "北海道情報専門学校",
+                    }
+                }, {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Point",
+                        "coordinates": [136.985318, 35.162474]
+                    },
+                    "properties": {
+                        "name": "星ヶ丘駅",
+                    }
+                }]
+            }
+
+            /* GeoJSONの読込 */
+            L.geoJSON(data, {
+                onEachFeature: function(feature, layer) {
+                    layer.bindPopup("<div style='width:200px'>" + feature.properties.name + "</div>");
+                }
+            }).addTo(mymap);
+
+            /* イベント処理 */
+            var popup = L.popup();
+            var chk = false;
+
+            function onMapClick(e) {
+                if (!chk) {
+                    newPop = popup.setLatLng(e.latlng).setContent(
+                        "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
+                    ).openOn(mymap);
+                    chk = true;
+                } else {
+                    chk = false;
+                }
+            }
+
+            var click = mymap.on('click', onMapClick);
+
+            function clickMarker(la, ln) {
+                newPin = L.marker([la, ln]).addTo(mymap);
+                newPop.remove();
+
+                newPin.bindPopup("<div style='width:200px'>新規ピン</</div>");
+
                 chk = false;
             }
-        }
 
-        mymap.on('click', onMapClick);
+            mymap.on('popupopen', function() {
+                var request = new XMLHttpRequest();
+                var lat = click._popup._latlng.lat;
+                var lng = click._popup._latlng.lng;
 
-        function clickMarker(la,ln) {
-            newPin = L.marker([la, ln]).addTo(mymap);
-            newPop.remove();
+                request.open('GET', 'https://api.open-meteo.com/v1/forecast?latitude=' + lat + '&longitude=' + lng + '&hourly=weathercode&models=best_match&timezone=auto', true);
+                request.responseType = 'json';
 
-            newPin.bindPopup("<div style='width:200px'>新規ピン</</div>");
+                request.onload = function() {
+                    var data = this.response;
+                    var code = data['hourly']['weathercode'][0];
+                    var tag = document.getElementById('meteo');
+                    tag.innerText = '今この場所は' + weathercodes[code];
+                };
 
-            chk = false;
-        }
-    </script>
+                request.send();
+            });
+            mymap.on('popupclose', function() {
+                var tag = document.getElementById('meteo');
+                tag.innerText = "";
+            });
+
+            window.addEventListener('load', function() {
+                var request = new XMLHttpRequest();
+
+                request.open('GET', 'weathercode.json');
+                request.responseType = 'json';
+
+                request.onload = function() {
+                    weathercodes = this.response;
+                };
+
+                request.send();
+            });
+        </script>
 </body>
 
 </html>
