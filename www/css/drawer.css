@@ -17,14 +17,14 @@
     position: absolute;
     width: 100%;
     text-align: center;
-    top: 30%;
+    top: 35%;
     transform: translateY(-50%);
 }
 ul.overlay-content li {
     padding: 0px;
 }
 .overlay-content li a {
-    padding: 30px;
+    padding: 20px;
     display: block;
     transition: 0.3s;
 }
@@ -78,4 +78,10 @@ ul.overlay-content li {
     top: 15px;
     right: 35px;
   }
+}
+
+.tenki {
+    position: absolute;
+    bottom: 5%;
+    right: 10%;
 }
