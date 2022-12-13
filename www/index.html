@@ -28,13 +28,14 @@
         var albumList = [];
         var userId;
         // ユーザー情報取得
-        // var currentUser = ncmb.User.getCurrentUser();
-        // if(currentUser) {
-        //     console.log("ログイン中のユーザーID：" + currentUser.get("userId"));
-        //     userId = currentUser.get("userId");     // ログインしているユーザーIDの取得
-        // } else {
-        //     console.log("未ログインまたは取得に失敗");
-        // }
+        var currentUser = ncmb.User.getCurrentUser();
+        if(currentUser) {
+            console.log("ログイン中のユーザーID：" + currentUser.get("userId"));
+            userId = currentUser.get("userId");     // ログインしているユーザーIDの取得
+        } else {
+            console.log("未ログインまたは取得に失敗");
+            window.location.href = 'login.html';
+        }
         // ピン情報取得
         pinList = pin.fetchById(userId)
                     .then(pinList =>{
