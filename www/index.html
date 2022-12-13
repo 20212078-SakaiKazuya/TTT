@@ -12,8 +12,54 @@
     <!-- leaflet.js -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
     <!-- ニフクラ -->
+    <script src="components/loader.js"></script>
     <script>
-        var ncmb = new NCMB('e44498b5a7e4cd2a91109984f4e302ff8fe419cd75c851d20e007d90e7de0bc2', '04900ad5869723f1e06f0aa311df99b3ea0db607d58d02834b7ac5862467c26e');
+        // ニフクラ接続
+        var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
+        var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771'
+        var ncmb = new NCMB(applicationKey, clientKey);
+        var reader = new FileReader();  //画像読み込み
+        // クラス,変数定義
+        var pin = ncmb.DataStore("pin");
+        var album = ncmb.DataStore("alubum");
+        var picture = ncmb.DataStore("picture");
+        var pinList = [];
+        var pictureList = [];
+        var albumList = [];
+        var userId;
+        // ユーザー情報取得
+        // var currentUser = ncmb.User.getCurrentUser();
+        // if(currentUser) {
+        //     console.log("ログイン中のユーザーID：" + currentUser.get("userId"));
+        //     userId = currentUser.get("userId");     // ログインしているユーザーIDの取得
+        // } else {
+        //     console.log("未ログインまたは取得に失敗");
+        // }
+        // ピン情報取得
+        pinList = pin.fetchById(userId)
+                    .then(pinList =>{
+                        console.log("データあり");
+                    })
+                    .catch(e =>{
+                        console.log("データなし");
+                    });
+        // ユーザーの写真を取得
+        pictureList = picture.fetchById(userId)
+                    .then(pictureList =>{
+                        console.log("データあり");
+                    })
+                    .catch(e =>{
+                        console.log("データなし");
+                    });
+        // ユーザーのアルバムを取得
+        albumList = album.fetchById(userId)
+                    .then(albumList =>{
+                        console.log("データあり");
+                    })
+                    .catch(e =>{
+                        console.log("データなし");
+                    });
+
     </script>
 
 </head>
@@ -22,7 +68,7 @@
 
     <!-- 地図を表示するブロック要素 -->
     <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
-
+    <!-- モーダル -->
     <div id="drawerNavi" class="overlay">
         <div id="drawerClose"><span class="lineClose"></span></div>
         <ul class="overlay-content">
