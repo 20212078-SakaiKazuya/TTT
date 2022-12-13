@@ -36,7 +36,7 @@
                 <a href="album.html"><img src="images/album.png"> </a>
             </li>
             <li>
-                <a href="#"><img src="images/setting.png"></a>
+                <a href="setting.html"><img src="images/setting.png"></a>
             </li>
             <li>
                 <a href="#"></a>
@@ -50,7 +50,7 @@
     <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
 
     <img class="none" src="images/indian.png" style="position:absolute;bottom:0;left:0;z-index:1000;width:20%;">
-    <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; font-size:50px;">
+    <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; font-size:50px;border-radius:10px;">
     </div>
     <div class="none" style="position:absolute;z-index:999;width:10%;height:5%;bottom:3%;left:27%;background-color:white;transform:rotate(45deg);"></div>
 
@@ -219,14 +219,12 @@
             }
         });
         mymap.on('popupclose', function() {
-            if (tenkiChk) {
-                var ind = document.getElementsByClassName('none');
-                for (i = 0; i < ind.length; i++) {
-                    ind[i].style.display = 'none';
-                }
-                var tag = document.getElementById('meteo');
-                tag.innerText = "";
+            var ind = document.getElementsByClassName('none');
+            for (i = 0; i < ind.length; i++) {
+                ind[i].style.display = 'none';
             }
+            var tag = document.getElementById('meteo');
+            tag.innerText = "";
         });
 
         window.addEventListener('load', function() {
