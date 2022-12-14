@@ -7,6 +7,7 @@
     <title>オリジナルマップの作成</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/drawer.css" />
+    <link rel="stylesheet" href="css/transition.css" />
     <!-- leaflet.css -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <!-- leaflet.js -->
@@ -74,16 +75,16 @@
         <div id="drawerClose"><span class="lineClose"></span></div>
         <ul class="overlay-content">
             <li>
-                <a href="curry.html"><img src="images/bookmark.png"></a>
+                <img src="images/bookmark.png" onclick="transition('curry.html');">
             </li>
             <li>
-                <a href="pin.html"><img src="images/pin.png"> </a>
+                <img src="images/pin.png" onclick="transition('pin.html');">
             </li>
             <li>
-                <a href="album.html"><img src="images/album.png"> </a>
+                <img src="images/album.png" onclick="transition('album.html');">
             </li>
             <li>
-                <a href="setting.html"><img src="images/setting.png"></a>
+                <img src="images/setting.png" onclick="transition('setting.html');">
             </li>
             <li>
                 <a href="#"></a>
@@ -91,6 +92,8 @@
         </ul>
         <img class="tenki" src="images/tenkiOn.png" onclick="tenki(this);">
     </div>
+
+    <div id="transform" class="transition"></div>
 
     <img src="images/snake_burger.png" id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;width:20%;">
 
@@ -117,6 +120,14 @@
     </script>
 
     <script>
+        function transition(url) {
+            document.getElementById('transform').style.width = "100%";
+            setTimeout(transLocation, 200, url);
+        }
+        function transLocation(url) {
+            window.location.href = url;
+        }
+
         var tenkiChk = true;
 
         function tenki(tenki) {
