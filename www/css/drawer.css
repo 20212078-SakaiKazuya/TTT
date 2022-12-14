@@ -19,6 +19,7 @@
     text-align: center;
     top: 35%;
     transform: translateY(-50%);
+    visibility: hidden;
 }
 ul.overlay-content li {
     padding: 0px;

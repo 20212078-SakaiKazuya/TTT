@@ -73,18 +73,18 @@
     <!-- モーダル -->
     <div id="drawerNavi" class="overlay">
         <div id="drawerClose"><span class="lineClose"></span></div>
-        <ul class="overlay-content">
+        <ul id="drawerContents" class="overlay-content">
             <li>
-                <img src="images/bookmark.png" onclick="transition('curry.html');">
+                <a><img src="images/bookmark.png" onclick="transition('curry.html');"></a>
             </li>
             <li>
-                <img src="images/pin.png" onclick="transition('pin.html');">
+                <a><img src="images/pin.png" onclick="transition('pin.html');"></a>
             </li>
             <li>
-                <img src="images/album.png" onclick="transition('album.html');">
+                <a><img src="images/album.png" onclick="transition('album.html');"></a>
             </li>
             <li>
-                <img src="images/setting.png" onclick="transition('setting.html');">
+                <a><img src="images/setting.png" onclick="transition('setting.html');"></a>
             </li>
             <li>
                 <a href="#"></a>
@@ -112,10 +112,12 @@
     <script>
         document.getElementById('drawerOpen').addEventListener('click', () => {
             document.getElementById("drawerNavi").style.width = "60%";
+            document.getElementById("drawerContents").style.visibility = "visible";
         });
 
         document.getElementById('drawerClose').addEventListener('click', () => {
             document.getElementById("drawerNavi").style.width = "0%";
+            document.getElementById("drawerContents").style.visibility = "hidden";
         });
     </script>
 
@@ -141,7 +143,8 @@
         }
 
         var mymap = L.map("mymap", {
-            zoomControl: false
+            zoomControl: false,
+            minZoom: 3
         });
         first = 0;
         var marklatlng;
@@ -252,9 +255,15 @@
             newPin = L.marker([la, ln]).addTo(mymap);
             newPop.remove();
 
-            newPin.bindPopup("<div style='width:200px'>新規ピン</</div>");
+            newPin.bindPopup("<div style='width:200px'>新規ピン</div><br><button style='width:100%;height:40px;' onclick='picture();'>写真登録<button style='width:100%;height:40px;' onclick='nameChange();'>名前変更");
 
             chk = false;
+        }
+        function picture() {
+            console.log('写真登録のボタンを押したぜ');
+        }
+        function nameChange() {
+            console.log('名前変更のボタンを押したぜ');
         }
 
         mymap.on('popupopen', function() {
