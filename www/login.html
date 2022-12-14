@@ -8,11 +8,12 @@
     <link rel="stylesheet" href="css/title.css" />
     <link rel="stylesheet" href="components/loader.css">
     <script src="components/loader.js"></script>
-    <script>
+    <script type="text/javascript" src="js/login.js"></script>
+    <!-- <script>
         //
         // TODO: Write JavaScript code here
         //
-    </script>
+    </script> -->
 </head>
 
 <body>
@@ -29,12 +30,13 @@
         <img src="images/login/username.png" style="position:absolute;left:10%;top:30%;">
 
         <input id="username" type="text" style="position:absolute;left:10%;top:33%;" size="30">
-
+        
         <img src="images/login/password.png" style="position:absolute;left:10%;top:40%;">
 
         <input id="password" type="password" style="position:absolute;left:10%;top:43%;" size="30">
 
-        <img src="images/login/loginButton.png" style="position:absolute;left:7.5%;bottom:30%;">
+        <img src="images/login/loginButton.png" style="position:absolute;left:7.5%;bottom:30%;" onclick="login();">
+        <a href="javascript:login();">ログイン</a>
 
         <div style="position:absolute;left:10%;bottom:25%;"><a href="signup.html">改宗 or 入信する？</a></div>
 
