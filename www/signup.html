@@ -7,11 +7,13 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <link rel="stylesheet" href="css/title.css" />
     <link rel="stylesheet" href="components/loader.css">
+    <script type="text/javascript" src="js/signup.js"></script>
     <script src="components/loader.js"></script>
     <script>
-        //
-        // TODO: Write JavaScript code here
-        //
+        // ニフクラ接続
+        var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
+        var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
+        var ncmb = new NCMB(applicationKey, clientKey);
     </script>
 </head>
 
@@ -39,7 +41,7 @@
 
         <input id="password" type="password" style="position:absolute;left:10%;top:53%;" size="30">
 
-        <img src="images/signup/send.png" style="position:absolute;left:7.5%;bottom:20%;">
+        <img src="images/signup/send.png" style="position:absolute;left:7.5%;bottom:20%;" onclick="javascript:signup();">
 
         <div style="position:absolute;left:10%;bottom:15%;"><a href="login.html">ログインする？</a></div>
 

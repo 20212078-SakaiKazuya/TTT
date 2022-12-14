@@ -9,11 +9,12 @@
     <link rel="stylesheet" href="components/loader.css">
     <script src="components/loader.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
-    <!-- <script>
-        //
-        // TODO: Write JavaScript code here
-        //
-    </script> -->
+    <script>
+        // ニフクラ接続
+        var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
+        var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
+        var ncmb = new NCMB(applicationKey, clientKey);
+    </script>
 </head>
 
 <body>
@@ -36,7 +37,6 @@
         <input id="password" type="password" style="position:absolute;left:10%;top:43%;" size="30">
 
         <img src="images/login/loginButton.png" style="position:absolute;left:7.5%;bottom:30%;" onclick="login();">
-        <a href="javascript:login();">ログイン</a>
 
         <div style="position:absolute;left:10%;bottom:25%;"><a href="signup.html">改宗 or 入信する？</a></div>
 
