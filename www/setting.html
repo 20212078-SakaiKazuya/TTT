@@ -1,23 +1,51 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
+    <link rel="stylesheet" href="css/setting.css">
     <link rel="stylesheet" href="components/loader.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kosugi&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Kosugi&display=swap');
+    </style>
+
     <script src="components/loader.js"></script>
-    <script>
-        //
-        // TODO: Write JavaScript code here
-        //
-    </script>
 </head>
+
 <body>
-    <h2>設定</h2>
-    <ul>
-        <li>ユーザーネーム変更</li>
-        <li>パスワード変更</li>
-        <li>ログアウト</li>
-    </ul>
+    <div id="background"><img src="images/setting/settingBackground.png"></div>
+
+    <div class="h1">
+        <h1>設定画面</h1>
+    </div>
+
+    <div class="username">
+        <p>ユーザーネーム</p>
+    </div>
+
+    <input id="username" type="text">
+    <img class="change1" src="images/setting/change.png" onclick="なんとかかんとか(username.value);">
+
+    <div class="mail">
+        <p>メールアドレス</p>
+    </div>
+
+    <input id="mail" type="text">
+    <img class="change2" src="images/setting/change.png" onclick="なんとかかんとか(mail.value);">
+
+    <div class="password">
+        <p>パスワード</p>
+    </div>
+
+    <input id="password" type="text">
+    <img class="change3" src="images/setting/change.png" onclick="なんとかかんとか(password.value);">
+
+    <a href="index.html"><img class="map" src="images/setting/map.png"></a>
+
+    <img class="logout" src="images/setting/logout.png">
 </body>
+
 </html>
