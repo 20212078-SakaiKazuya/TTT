@@ -6,4 +6,15 @@ function logout(){
     var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
     var ncmb = new NCMB(applicationKey, clientKey);
     
+    // ログアウト
+    var result = window.confirm('ログアウトしますか');
+    if(result){ // okが押された
+        ncmb.User.logout()
+        window.alert('ログアウトしました');
+        console.log('ログアウトしました');
+        document.location.href = 'title.html';
+    } else {    // キャンセルが押された
+        window.alert('キャンセルしました');
+        document.location.href = 'index.html';
+    }
 }

@@ -20,11 +20,13 @@ function signup(){
     newUser.signUpByAccount()
            .then(function(){
                //登録処理
-               console.log('登録しました');
+               window.alert(signupUserName + 'が登録されました');
+               console.log('登録しました ' + '登録ユーザー名:' + signupUserName);
                document.location.href = 'index.html';
            })
            .catch(function(e){
                //エラー処理
+               window.alert(signupUserName + 'または' + signupUserMailaddress + 'が同じです');
                console.log('登録できませんでした');
                document.location.href = 'signup.html';
            });

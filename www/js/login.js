@@ -21,12 +21,14 @@ function login(){
     ncmb.User.login(user)
         .then(function(data) {
             // ログイン成功時
-            console.log(loginUserName + ' & ' + loginUserPassword);
+            // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
             console.log('ログインしました');
+            window.alert(loginUserName + 'でログインしました');
             document.location.href = 'index.html';
         })
         .catch(function(e){
             // ログイン失敗時
+            window.alert('ログインに失敗しました');
             console.log(loginUserName + ' & ' + loginUserPassword);
             console.log('ログインに失敗しました');
             document.location.href = 'login.html';
