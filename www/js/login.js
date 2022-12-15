@@ -23,8 +23,8 @@ function login(){
             // ログイン成功時
             // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
             console.log('ログインしました');
-            window.alert(loginUserName + 'でログインしました');
-            document.location.href = 'index.html';
+            //window.alert(loginUserName + 'でログインしました');
+            document.location.href='index.html';
         })
         .catch(function(e){
             // ログイン失敗時
