@@ -11,8 +11,9 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Kosugi&display=swap');
     </style>
-    <script type="text/javascript" src="js/logout.js"></script>
     <script src="components/loader.js"></script>
+    <script type="text/javascript" src="js/logout.js"></script>
+    <script type="text/javascript" src="js/update.js"></script>
 </head>
 
 <body>
@@ -27,21 +28,21 @@
     </div>
 
     <input id="username" type="text">
-    <img class="change1" src="images/setting/change.png" onclick="なんとかかんとか(username.value);">
+    <img class="change1" src="images/setting/change.png" onclick="userNameUpdate(username.value);">
 
     <div class="mail">
         <p>メールアドレス</p>
     </div>
 
     <input id="mail" type="text">
-    <img class="change2" src="images/setting/change.png" onclick="なんとかかんとか(mail.value);">
+    <img class="change2" src="images/setting/change.png" onclick="userMailaddressUpdate(mail.value);">
 
     <div class="password">
         <p>パスワード</p>
     </div>
 
     <input id="password" type="text">
-    <img class="change3" src="images/setting/change.png" onclick="なんとかかんとか(password.value);">
+    <img class="change3" src="images/setting/change.png" onclick="userPasswordUpdate(password.value);">
 
     <a href="index.html"><img class="map" src="images/setting/map.png"></a>
 

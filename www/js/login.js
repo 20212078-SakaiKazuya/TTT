@@ -23,12 +23,12 @@ function login(){
             // ログイン成功時
             // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
             console.log('ログインしました');
-            //window.alert(loginUserName + 'でログインしました');
-            document.location.href='index.html';
+            console.log('ログインユーザー: ' + loginUserName);
+            trueLoginAlert();   // SweetAlert2
         })
         .catch(function(e){
             // ログイン失敗時
-            window.alert('ログインに失敗しました');
+            window.alert('ログインに失敗しました');     // FIX ME
             console.log(loginUserName + ' & ' + loginUserPassword);
             console.log('ログインに失敗しました');
             document.location.href = 'login.html';

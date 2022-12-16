@@ -13,17 +13,58 @@ if(currentUserFlg){
     var currentUserPass = currentUser.get("password");      // 現在のパスワード
     var currentUserMailAddress = currentUser.get("mailaddress");    // 現在のメールアドレス
 } else {
+    window.alert('エラーが発生しました¥nマップ画面に戻ります'); // FIX ME
+    document.locatin.href = 'index.html';
+}
     
+function userNameUpdate(newUserName){      // ユーザー名変更
+    var settingUserName = newUserName;
+    // 新しいユーザー名が登録済ではないか確認
 
-
-function userNameUpdate(userName, newUserName){      // ユーザー名変更
-
+    currentUser.set('userName', settingUserName)
+    .update()
+    .then(function(obj) {
+        // 更新成功
+        window.alert('ユーザー名を更新しました');   // FIX ME
+        document.location.href = 'setting.html';
+    })
+    .catch(function(e) {
+        // 更新失敗
+        window.alert('エラーが発生しました¥n設定画面に戻ります'); // FIX ME
+        document.location.href = 'setting.html';
+    });
 }
 
-function userPasswordUpdate(userPassword, newUserPassword){      // パスワード変更
-
+function userPasswordUpdate(newUserPassword){      // パスワード変更
+    var settingUserPassword = newUserPassword;
+    currentUser.set('password', settingUserPassword)
+    .update()
+    .then(function(obj) {
+        // 更新成功
+        window.alert('パスワードを更新しました');   // FIX ME
+        document.location.href = 'setting.html';
+    })
+    .catch(function(e) {
+        // 更新失敗
+        window.alert('エラーが発生しました¥n設定画面に戻ります'); // FIX ME
+        document.location.href = 'setting.html';
+    });
 }
 
-function userMailaddressUpdate(userMailAddress, newUserMailAddress){       // メールアドレス変更
+function userMailaddressUpdate(newUserMailAddress){       // メールアドレス変更
+    var settingUserMailAddress = newUserMailAddress;
+    // 新しいメールアドレスが登録済ではないか確認
 
+    currentUser.set('mailAddress', settingUserMailAddress)
+    .update()
+    .then(function(obj) {
+        // 更新成功
+        window.alert('メールアドレスを更新しました');   // FIX ME
+        document.location.href = 'setting.html';
+    })
+    .catch(function(e) {
+        // 更新失敗
+        window.alert('エラーが発生しました¥n設定画面に戻ります'); // FIX ME
+        document.location.href = 'setting.html';
+    });
 }
