@@ -2,7 +2,9 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <!-- ページタイトル -->
     <title>オリジナルマップの作成</title>
     <link rel="stylesheet" href="css/style.css" />
@@ -100,9 +102,9 @@
     <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
 
     <img class="none" src="images/indian.png" style="position:absolute;bottom:0;left:0;z-index:1000;width:20%;">
-    <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; font-size:50px;border-radius:10px;">
+    <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; border-radius:10px;">
     </div>
-    <div class="none" style="position:absolute;z-index:999;width:10%;height:5%;bottom:3%;left:27%;background-color:white;transform:rotate(45deg);"></div>
+    <div class="none" style="position:absolute;z-index:999;width:10%;height:5%;bottom:6%;left:25%;background-color:white;transform:rotate(45deg);"></div>
 
     <!-- デバッグ用 -->
 
@@ -150,8 +152,8 @@
         var genzai = L.icon({
             iconUrl: 'images/30264.png',
             iconRetinaUrl: 'images/30264.png',
-            iconSize: [30, 30],
-            iconAnchor: [15, 30],
+            iconSize: [20, 20],
+            iconAnchor: [15, 15],
             popupAnchor: [0, -50],
         });
 
@@ -196,8 +198,8 @@
         /* 地図タイルとクレジット表示 */
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: "&copy; <a href='http://osm.org/copyright'>OpenStreetMap</a> contributors",
-            maxZoom: 20,
-            maxNativeZoom: 18
+            maxZoom: 16,
+            maxNativeZoom: 16
         }).addTo(mymap);
 
         /* マーカー表示 */
@@ -227,7 +229,7 @@
         /* GeoJSONの読込 */
         L.geoJSON(data, {
             onEachFeature: function(feature, layer) {
-                layer.bindPopup("<div style='width:200px'>" + feature.properties.name + "</div>");
+                layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>");
             }
         }).addTo(mymap);
 
@@ -238,7 +240,7 @@
         function onMapClick(e) {
             if (!chk) {
                 newPop = popup.setLatLng(e.latlng).setContent(
-                    "<p>この場所にピンを立てますか？</p><br><button style='width:100%;height:40px;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
+                    "<p>この場所にピンを立てますか？</p><input id='pinname' type='text' placeholder='新規ピンの名前' maxlength='15' style='width:90%;'><br><br><button style='width:100%;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
                 ).openOn(mymap);
                 chk = true;
             } else {
@@ -251,8 +253,10 @@
         function clickMarker(la, ln) {
             newPin = L.marker([la, ln]).addTo(mymap);
             newPop.remove();
+            var pinname = document.getElementById('pinname').value;
+            if (pinname.length == 0 || pinname == null) {pinname = '新規ピン';}
 
-            newPin.bindPopup("<div style='width:200px'>新規ピン</div><br><button style='width:100%;height:40px;' onclick='picture();'>写真登録<button style='width:100%;height:40px;' onclick='nameChange();'>名前変更");
+            newPin.bindPopup("<div style='width:200px'>" + pinname + "</div><br><button style='width:100%;' onclick='picture();'>写真登録<button style='width:100%;' onclick='nameChange();'>名前変更");
 
             chk = false;
         }

@@ -1,8 +1,11 @@
 .leaflet-popup-content {
-    font-size: 3em !important;
+    font-size: 1em !important;
 }
 .leaflet-popup-content button {
-    font-size: 30px;
+    font-size: 10px;
+}
+.leaflet-popup-content input {
+    font-size: 10px;
 }
 .none {
     display: none;
