@@ -21,7 +21,7 @@
         var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
         var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771'
         var ncmb = new NCMB(applicationKey, clientKey);
-        var reader = new FileReader();  //画像読み込み
+        var reader = new FileReader(); //画像読み込み
         // クラス,変数定義
         var pin = ncmb.DataStore("pin");
         var album = ncmb.DataStore("alubum");
@@ -41,29 +41,28 @@
         // }
         // ピン情報取得
         pinList = pin.fetchById(userId)
-                    .then(pinList =>{
-                        console.log("データあり");
-                    })
-                    .catch(e =>{
-                        console.log("データなし");
-                    });
+            .then(pinList => {
+                console.log("データあり");
+            })
+            .catch(e => {
+                console.log("データなし");
+            });
         // ユーザーの写真を取得
         pictureList = picture.fetchById(userId)
-                    .then(pictureList =>{
-                        console.log("データあり");
-                    })
-                    .catch(e =>{
-                        console.log("データなし");
-                    });
+            .then(pictureList => {
+                console.log("データあり");
+            })
+            .catch(e => {
+                console.log("データなし");
+            });
         // ユーザーのアルバムを取得
         albumList = album.fetchById(userId)
-                    .then(albumList =>{
-                        console.log("データあり");
-                    })
-                    .catch(e =>{
-                        console.log("データなし");
-                    });
-
+            .then(albumList => {
+                console.log("データあり");
+            })
+            .catch(e => {
+                console.log("データなし");
+            });
     </script>
 
 </head>
@@ -127,6 +126,7 @@
             document.getElementById('transform').style.width = "100%";
             setTimeout(transLocation, 200, url);
         }
+
         function transLocation(url) {
             window.location.href = url;
         }
@@ -150,6 +150,7 @@
         first = 0;
         var marklatlng;
         var markers = [];
+        var markinfo = [];
 
         /* アイコンの設定 */
         var genzai = L.icon({
@@ -197,13 +198,27 @@
         }
 
         function camera() {
+            navigator.camera.getPicture(successCamera, errorCamera, {
+                sourceType: Camera.PictureSourceType.CAMERA,
+                quality: 30,
+                destinationType : Camera.DestinationType.DATA_URL,
+                allowEdit: true
+            });
+        }
+
+        function successCamera(image) {
             var minlocation = searchMarker();
+
             if (minlocation.getLatLng().distanceTo(marklatlng) <= 50) {
                 //TODO 最も近いマーカーに画像をつける
-                console.log('minlocation');
+                minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><img src="data:image/jpeg;base64,' + image + '" width="200"><br><button style="width:100%;" onclick="picture();">写真登録<button style="width:100%;" onclick="nameChange();">名前変更');
             } else {
-                clickMarker(marklatlng.lat, marklatlng.lng);       
+                clickMarker(marklatlng.lat, marklatlng.lng);
             }
+        }
+
+        function errorCamera() {
+            return 'error';
         }
 
 
@@ -242,6 +257,7 @@
         L.geoJSON(data, {
             onEachFeature: function(feature, layer) {
                 markers.push(layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>"));
+                markinfo.push(feature.properties.name);
             }
         }).addTo(mymap);
 
@@ -268,19 +284,23 @@
             try {
                 newPop.remove();
                 var pinname = document.getElementById('pinname').value;
-                if (pinname.length == 0 || pinname == null) {pinname = '新規ピン';}
-            }
-            catch (e) {
+                if (pinname.length == 0 || pinname == null) {
+                    pinname = '新規ピン';
+                }
+            } catch (e) {
                 var pinname = '新規ピン';
             }
 
+            markinfo.push(pinname);
             newPin.bindPopup("<div style='width:200px'>" + pinname + "</div><br><button style='width:100%;' onclick='picture();'>写真登録<button style='width:100%;' onclick='nameChange();'>名前変更");
 
             chk = false;
         }
+
         function picture() {
             console.log('写真登録のボタンを押したぜ');
         }
+
         function nameChange() {
             console.log('名前変更のボタンを押したぜ');
         }
@@ -339,7 +359,6 @@
                     min = markers[i];
                 }
             }
-            console.log('min is ' + min.getLatLng().lat + ',' + min.getLatLng().lng);
             return min;
         }
     </script>
