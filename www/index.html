@@ -101,6 +101,8 @@
 
     <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
 
+    <img src="images/camera.png" style="position:absolute;top:10%;left:0;z-index:1000;width:15%;background-color:white;border-radius:50px;" onclick="camera();">
+
     <img class="none" src="images/indian.png" style="position:absolute;bottom:0;left:0;z-index:1000;width:20%;">
     <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; border-radius:10px;">
     </div>
@@ -147,6 +149,7 @@
         });
         first = 0;
         var marklatlng;
+        var markers = [];
 
         /* アイコンの設定 */
         var genzai = L.icon({
@@ -193,6 +196,15 @@
             mymap.setView(marklatlng, 18);
         }
 
+        function camera() {
+            var minlocation = searchMarker();
+            if (minlocation.getLatLng().distanceTo(marklatlng) <= 50) {
+                //TODO 最も近いマーカーに画像をつける
+                console.log('minlocation');
+            } else {
+                clickMarker(marklatlng.lat, marklatlng.lng);       
+            }
+        }
 
 
         /* 地図タイルとクレジット表示 */
@@ -229,7 +241,7 @@
         /* GeoJSONの読込 */
         L.geoJSON(data, {
             onEachFeature: function(feature, layer) {
-                layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>");
+                markers.push(layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>"));
             }
         }).addTo(mymap);
 
@@ -252,9 +264,15 @@
 
         function clickMarker(la, ln) {
             newPin = L.marker([la, ln]).addTo(mymap);
-            newPop.remove();
-            var pinname = document.getElementById('pinname').value;
-            if (pinname.length == 0 || pinname == null) {pinname = '新規ピン';}
+            markers.push(newPin);
+            try {
+                newPop.remove();
+                var pinname = document.getElementById('pinname').value;
+                if (pinname.length == 0 || pinname == null) {pinname = '新規ピン';}
+            }
+            catch (e) {
+                var pinname = '新規ピン';
+            }
 
             newPin.bindPopup("<div style='width:200px'>" + pinname + "</div><br><button style='width:100%;' onclick='picture();'>写真登録<button style='width:100%;' onclick='nameChange();'>名前変更");
 
@@ -312,6 +330,18 @@
 
             request.send();
         });
+
+        // 現在地に最も近いマーカーを割り出す
+        function searchMarker() {
+            var min = markers[0];
+            for (i = 1; i < markers.length; i++) {
+                if (min.getLatLng().distanceTo(marklatlng) > markers[i].getLatLng().distanceTo(marklatlng)) {
+                    min = markers[i];
+                }
+            }
+            console.log('min is ' + min.getLatLng().lat + ',' + min.getLatLng().lng);
+            return min;
+        }
     </script>
 </body>
 
