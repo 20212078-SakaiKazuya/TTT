@@ -8,29 +8,27 @@ function login(){
     // ログイン情報の取得
     var loginUserName = document.getElementById("username").value;
     var loginUserPassword = document.getElementById("password").value;
-    var loginFlg = false;
-
     // 入力チェック
     if(loginUserName == ""){
-        window.alert('ユーザー名を入力してください');
+        nameCheck();
+    } else if(loginUserPassword == ""){
+        passCheck();
+    } else { 
+        // ログイン処理
+        var user = new ncmb.User({userName:loginUserName, password:loginUserPassword});
+        ncmb.User.login(user)
+            .then(function(data) {
+                // ログイン成功時
+                // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
+                console.log('ログインしました');
+                console.log('ログインユーザー: ' + loginUserName);
+                trueLoginAlert();   // SweetAlert2
+            })
+            .catch(function(e){
+                // ログイン失敗時
+                // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
+                console.log('ログインに失敗しました');
+                falseLoginAlert();      // SweetAlert2
+            });
     }
-    if(loginUserPassword == ""){
-        window.alert('パスワードを入力してください');
-    }
-    var user = new ncmb.User({userName:loginUserName, password:loginUserPassword});
-    ncmb.User.login(user)
-        .then(function(data) {
-            // ログイン成功時
-            // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
-            console.log('ログインしました');
-            console.log('ログインユーザー: ' + loginUserName);
-            trueLoginAlert();   // SweetAlert2
-        })
-        .catch(function(e){
-            // ログイン失敗時
-            window.alert('ログインに失敗しました');     // FIX ME
-            console.log(loginUserName + ' & ' + loginUserPassword);
-            console.log('ログインに失敗しました');
-            document.location.href = 'login.html';
-        });
 }

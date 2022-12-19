@@ -16,18 +16,28 @@ function signup(){
     newUser.set("userName", signupUserName)  /*ユーザー名*/
            .set("password", signupUserPassword) /*パスワード*/
            .set("mailAddress", signupUserMailaddress)   /*メールアドレス*/
-    // 新規登録処理
-    newUser.signUpByAccount()
-           .then(function(){
-               //登録処理
-               window.alert(signupUserName + 'が登録されました');   // FIX ME
-               console.log('登録しました ' + '登録ユーザー名:' + signupUserName);
-               document.location.href = 'index.html';
-           })
-           .catch(function(e){
-               //エラー処理
-               window.alert(signupUserName + 'または' + signupUserMailaddress + 'が同じです');  // FIX ME
-               console.log('登録できませんでした');
-               document.location.href = 'signup.html';
-           });
+    // 入力チェック
+    if(signupUserName == ""){
+        signupNameCheck();
+    } else if(signupUserPassword == ""){
+        signupPassCheck();
+    }else if(signupUserMailaddress == ""){
+        signupMailCheck();
+    } else {
+        // 新規登録処理
+        newUser.signUpByAccount()
+               .then(function(){
+                    //登録処理
+                    console.log('登録ユーザー名:' + signupUserName);
+                    ncmb.User.login(signupUserName, signupUserPassword)
+                        .then(function(data){
+                            console.log('新規ユーザーでログイン');
+                            trueSignupUserAlert();
+                        });
+                })
+               .catch(function(e){
+                    //エラー処理
+                    falseSignupUserAlert();
+                });
+    }
 }

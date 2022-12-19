@@ -7,14 +7,7 @@ function logout(){
     var ncmb = new NCMB(applicationKey, clientKey);
     
     // ログアウト
-    var result = window.confirm('ログアウトしますか');
-    if(result){ // okが押された
-        ncmb.User.logout()
-        window.alert('ログアウトしました');
-        console.log('ログアウトしました');
-        document.location.href = 'title.html';
-    } else {    // キャンセルが押された
-        window.alert('キャンセルしました');
-        document.location.href = 'index.html';
-    }
+    ncmb.User.logout()
+    console.log('ログアウトしました');
+    logoutAlert();
 }
