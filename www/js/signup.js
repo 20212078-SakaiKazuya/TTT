@@ -12,10 +12,15 @@ function signup(){
 
     // userインスタンスの生成
     var newUser = new ncmb.User();
+    // 全員読み込み,書き込み可能に設定する
+    var acl = new ncmb.Acl();
+    acl.setPublicReadAccess(true)
+        .setPublicWriteAccess(true);
     // ユーザー名,パスワード,メールアドレスを設定
     newUser.set("userName", signupUserName)  /*ユーザー名*/
            .set("password", signupUserPassword) /*パスワード*/
            .set("mailAddress", signupUserMailaddress)   /*メールアドレス*/
+           .set("acl", acl)     /*権限付与*/
     // 入力チェック
     if(signupUserName == ""){
         signupNameCheck();

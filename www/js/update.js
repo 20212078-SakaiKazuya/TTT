@@ -4,6 +4,7 @@
 var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
 var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
 var ncmb = new NCMB(applicationKey, clientKey);
+
 // カレントユーザーの取得
 var user = new ncmb.User();
 var currentUserFlg = user.isCurrentUser();
@@ -20,28 +21,28 @@ if(currentUserFlg){
     document.locatin.href = 'index.html';
 }
     
-function userNameUpdate(newUserName){      // ユーザー名変更
-    var settingUserName = newUserName;
+async function userNameUpdate(){      // ユーザー名変更
+    var settingUserName = document.getElementById("username").value;    // 設定画面から値を取得
+    var getUserName;    // 検索結果保持用
     // 新しいユーザー名が登録済ではないか確認
-    ncmb.User.fetchAll()
-             .then(users => {
-                 users.forEach(user => {
-                 console.log(user.length);
-                 // 登録されている場合
-                 for(var i = 0; i < user.length; i++){
-                    console.log(user.userName);
-                    if(user.userName === settingUserName) {
-                        sameUserName();
-                    }
+    await ncmb.User.equalTo("userName", settingUserName)
+             .fetchAll()
+             .then(function(result) {
+                 console.log(result);
+                 if(result.length != 0){
+                    getUserName = result[0].userName;
+                    console.log(getUserName);
                  }
-                })
              })
             .catch(function(e){
                 errorAlert();
             });
+    console.log(getUserName + " & " + settingUserName);
     // 入力チェック
     if(settingUserName == ""){
         errorName();
+    } else if(getUserName == settingUserName) {
+        sameUserName();
     } else {
         // ユーザー名変更作業
         currentUser.set('userName', settingUserName)
@@ -57,8 +58,8 @@ function userNameUpdate(newUserName){      // ユーザー名変更
     }
 }
 
-function userPasswordUpdate(newUserPassword){      // パスワード変更
-    var settingUserPassword = newUserPassword;
+function userPasswordUpdate(){      // パスワード変更
+    var settingUserPassword = document.getElementById("password").value;
     // 入力チェック(空白ではないか)
     if(settingUserPassword == ""){
         errorPass();
@@ -77,13 +78,27 @@ function userPasswordUpdate(newUserPassword){      // パスワード変更
     }
 }
 
-function userMailaddressUpdate(newUserMailAddress){       // メールアドレス変更
-    var settingUserMailAddress = newUserMailAddress;
+async function userMailaddressUpdate(){       // メールアドレス変更
+    var settingUserMailAddress = document.getElementById("mail").value;
+    var getUserMail;    // 検索結果保持用
     // 新しいメールアドレスが登録済ではないか確認
-
-    // 入力チェック(空白ではないか)
+    await ncmb.User.equalTo("mailAddress", settingUserMailAddress)
+             .fetchAll()
+             .then(function(result) {
+                 console.log(result);
+                 if(result.length != 0){
+                    getUserMail = result[0].mailAddress;
+                    console.log(getUserMail);
+                 }
+             })
+            .catch(function(e){
+                errorAlert();
+            });
+    // 入力チェック
     if(settingUserMailAddress == ""){
         errorMailAddress();
+    } else if(getUserMail == settingUserMailAddress) {
+        sameUserMail();
     } else {
         // メールアドレス変更作業
         currentUser.set('mailAddress', settingUserMailAddress)

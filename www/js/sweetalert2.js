@@ -161,6 +161,16 @@ function sameUserName(){        // ユーザー名入力チェック
         document.location.hred = 'setting.html';
     });
 }
+function sameUserMail(){        // メールアドレス入力チェック
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: '既に登録されているメールアドレスです',
+        icon: 'warning'
+    }).then((result) => {
+        console.log('エラー: メールアドレスが登録済');
+        document.location.hred = 'setting.html';
+    });
+}
 function updateUserName(){      // ユーザー名変更
     Swal.fire({
         title: '更新しました!',
