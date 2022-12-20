@@ -165,9 +165,7 @@
         function camera() {
             navigator.camera.getPicture(successCamera, errorCamera, {
                 sourceType: Camera.PictureSourceType.CAMERA,
-                quality: 30,
-                destinationType : Camera.DestinationType.DATA_URL,
-                allowEdit: true
+                destinationType : Camera.DestinationType.DATA_URL
             });
         }
 
@@ -176,12 +174,12 @@
 
             if (minlocation.getLatLng().distanceTo(marklatlng) <= 50) {
                 //TODO 最も近いマーカーに画像をつける
-                minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><img src="data:image/jpeg;base64,' + image + '" width="200"><br><button style="width:100%;" onclick="picture();">写真登録<button style="width:100%;" onclick="nameChange();">名前変更');
+                minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture();"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
             } else {
                 newPin = L.marker(marklatlng).addTo(mymap);
                 markers.push(newPin);
                 markinfo.push('新規ピン');
-                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><img src="data:image/jpeg;base64,' + image + '" width="200"><br><button style="width:100%;" onclick="picture();">写真登録<button style="width:100%;" onclick="nameChange();">名前変更');
+                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture();"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
 
                 if (minlocation.getLatLng().lat == 0 && minlocation.getLatLng().lng == 0) {
                     minlocation.remove();
@@ -264,13 +262,21 @@
             }
 
             markinfo.push(pinname);
-            newPin.bindPopup("<div style='width:200px'>" + pinname + "</div><br><button style='width:100%;' onclick='picture();'>写真登録<button style='width:100%;' onclick='nameChange();'>名前変更");
+            newPin.bindPopup("<div style='width:200px'>" + pinname + '</div><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + markinfo.indexOf(pinname) + ');"></td></tr></table><img src="" height="100"><span> </span><img src="images/piccount.png" width="20">');
 
             chk = false;
         }
 
-        function picture() {
-            console.log('写真登録のボタンを押したぜ');
+        function picture(idx) {
+            console.log('写真追加のボタンを押したぜ');
+            var pictPin = markers[idx];
+            console.log(idx);
+            navigator.camera.getPicture(function(pict){
+                img.src = 'data:image/jpeg;base64,' + pict;
+            }, function(){}, {
+                sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+                destinationType : Camera.DestinationType.DATA_URL
+            });
         }
 
         function nameChange() {
