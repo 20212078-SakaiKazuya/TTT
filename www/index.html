@@ -70,7 +70,7 @@
 <body>
 
     <!-- 地図を表示するブロック要素 -->
-    <div id="mymap" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div>
+    <div id="mymap"></div>
     <!-- モーダル -->
     <div id="drawerNavi" class="overlay">
         <div id="drawerClose"><span class="lineClose"></span></div>
@@ -96,53 +96,18 @@
 
     <div id="transform" class="transition"></div>
 
-    <img src="images/snake_burger.png" id="drawerOpen" style="position:absolute;top:0;left:0;z-index:1000;width:20%;">
+    <img src="images/snake_burger.png" id="drawerOpen">
 
-    <img src="images/eye.png" style="position:absolute;top:0;right:0;z-index:1000;width:20%;" onclick="currentLocation();">
+    <img src="images/eye.png" class="eye" onclick="currentLocation();">
 
-    <img src="images/camera.png" style="position:absolute;top:10%;right:0;z-index:1000;width:19%;" onclick="camera();">
+    <img src="images/camera.png" class="camera" onclick="camera();">
 
-    <img class="none" src="images/indian.png" style="position:absolute;bottom:0;left:0;z-index:1000;width:20%;">
-    <div id="meteo" class="none" style="position:absolute;bottom:20px;right:20px;z-index:1000; background-color:white; width:70%; height:10%; border-radius:10px;">
-    </div>
-    <div class="none" style="position:absolute;z-index:999;width:10%;height:5%;bottom:6%;left:25%;background-color:white;transform:rotate(45deg);"></div>
+    <img class="none indian" src="images/indian.png">
+    <div id="meteo" class="none"></div>
+    <div class="none triangle"></div>
 
-    <!-- デバッグ用 -->
-
+    <script src="js/index.js"></script>
     <script>
-        document.getElementById('drawerOpen').addEventListener('click', () => {
-            document.getElementById("drawerNavi").style.width = "60%";
-            document.getElementById("drawerContents").style.visibility = "visible";
-        });
-
-        document.getElementById('drawerClose').addEventListener('click', () => {
-            document.getElementById("drawerNavi").style.width = "0%";
-            document.getElementById("drawerContents").style.visibility = "hidden";
-        });
-    </script>
-
-    <script>
-        function transition(url) {
-            document.getElementById('transform').style.width = "100%";
-            setTimeout(transLocation, 200, url);
-        }
-
-        function transLocation(url) {
-            window.location.href = url;
-        }
-
-        var tenkiChk = true;
-
-        function tenki(tenki) {
-            if (tenki.src.substring(tenki.src.length - 18, tenki.src.lengh) == 'images/tenkiOn.png') {
-                tenki.src = 'images/tenkiOff.png';
-                tenkiChk = false;
-            } else {
-                tenki.src = 'images/tenkiOn.png';
-                tenkiChk = true;
-            }
-        }
-
         var mymap = L.map("mymap", {
             zoomControl: false,
             minZoom: 3
@@ -213,7 +178,14 @@
                 //TODO 最も近いマーカーに画像をつける
                 minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><img src="data:image/jpeg;base64,' + image + '" width="200"><br><button style="width:100%;" onclick="picture();">写真登録<button style="width:100%;" onclick="nameChange();">名前変更');
             } else {
-                clickMarker(marklatlng.lat, marklatlng.lng);
+                newPin = L.marker(marklatlng).addTo(mymap);
+                markers.push(newPin);
+                markinfo.push('新規ピン');
+                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><img src="data:image/jpeg;base64,' + image + '" width="200"><br><button style="width:100%;" onclick="picture();">写真登録<button style="width:100%;" onclick="nameChange();">名前変更');
+
+                if (minlocation.getLatLng().lat == 0 && minlocation.getLatLng().lng == 0) {
+                    minlocation.remove();
+                }
             }
         }
 
@@ -230,36 +202,36 @@
         }).addTo(mymap);
 
         /* マーカー表示 */
-        data = {
-            "type": "FeatureCollection",
-            "features": [{
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [141.37970483779569, 43.05595115422]
-                },
-                "properties": {
-                    "name": "北海道情報専門学校",
-                }
-            }, {
-                "type": "Feature",
-                "geometry": {
-                    "type": "Point",
-                    "coordinates": [136.985318, 35.162474]
-                },
-                "properties": {
-                    "name": "星ヶ丘駅",
-                }
-            }]
-        }
+        // data = {
+        //     "type": "FeatureCollection",
+        //     "features": [{
+        //         "type": "Feature",
+        //         "geometry": {
+        //             "type": "Point",
+        //             "coordinates": [141.37970483779569, 43.05595115422]
+        //         },
+        //         "properties": {
+        //             "name": "北海道情報専門学校",
+        //         }
+        //     }, {
+        //         "type": "Feature",
+        //         "geometry": {
+        //             "type": "Point",
+        //             "coordinates": [136.985318, 35.162474]
+        //         },
+        //         "properties": {
+        //             "name": "星ヶ丘駅",
+        //         }
+        //     }]
+        // }
 
-        /* GeoJSONの読込 */
-        L.geoJSON(data, {
-            onEachFeature: function(feature, layer) {
-                markers.push(layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>"));
-                markinfo.push(feature.properties.name);
-            }
-        }).addTo(mymap);
+        // /* GeoJSONの読込 */
+        // L.geoJSON(data, {
+        //     onEachFeature: function(feature, layer) {
+        //         markers.push(layer.bindPopup("<div style='width:150px'>" + feature.properties.name + "</div>"));
+        //         markinfo.push(feature.properties.name);
+        //     }
+        // }).addTo(mymap);
 
         /* イベント処理 */
         var popup = L.popup();
@@ -338,26 +310,18 @@
             tag.innerText = "";
         });
 
-        window.addEventListener('load', function() {
-            var request = new XMLHttpRequest();
-
-            request.open('GET', 'weathercode.json');
-            request.responseType = 'json';
-
-            request.onload = function() {
-                weathercodes = this.response;
-            };
-
-            request.send();
-        });
-
         // 現在地に最も近いマーカーを割り出す
         function searchMarker() {
-            var min = markers[0];
-            for (i = 1; i < markers.length; i++) {
-                if (min.getLatLng().distanceTo(marklatlng) > markers[i].getLatLng().distanceTo(marklatlng)) {
-                    min = markers[i];
+            try {
+                var example = markers[0].getLatLng().lat;
+                var min = markers[0];
+                for (i = 1; i < markers.length; i++) {
+                    if (min.getLatLng().distanceTo(marklatlng) > markers[i].getLatLng().distanceTo(marklatlng)) {
+                        min = markers[i];
                 }
+            }
+            } catch {
+                var min = L.marker([0, 0], {opacity: 0}).addTo(mymap);
             }
             return min;
         }

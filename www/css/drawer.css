@@ -81,6 +81,14 @@ ul.overlay-content li {
   }
 }
 
+#drawerOpen {
+    position:absolute;
+    top:0;
+    left:0;
+    z-index:1000;
+    width:20%;
+}
+
 .tenki {
     position: absolute;
     bottom: 5%;

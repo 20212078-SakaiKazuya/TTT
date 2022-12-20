@@ -16,6 +16,27 @@
     width: 100%;
     height: auto;
 }
+.indian {
+    position: fixed;
+    top: 35%;
+    right: 25%;
+    z-index: 10;
+
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 1.1666s;
+    animation-name: anim_v;
+}
+@keyframes anim_v {
+  0% {
+    transform: translate(0, 0px);
+  }
+  100% {
+    transform: translate(0, 30px);
+  }
+}
+
 #title{
     vertical-align: bottom;
     text-align: center;

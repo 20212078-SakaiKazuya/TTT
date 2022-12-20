@@ -1,3 +1,51 @@
+#mymap {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+.eye {
+    position:absolute;
+    top:0;
+    right:0;
+    z-index:1000;
+    width:20%;
+}
+.camera {
+    position:absolute;
+    top:10%;
+    right:0;
+    z-index:1000;
+    width:19%;
+}
+.indian {
+    position:absolute;
+    bottom:0;
+    left:0;
+    z-index:1000;
+    width:20%;
+}
+#meteo {
+    position:absolute;
+    bottom:20px;
+    right:20px;
+    z-index:1000;
+    background-color:white;
+    width:70%;
+    height:10%;
+    border-radius:10px;
+}
+.triangle {
+    position:absolute;
+    z-index:999;
+    width:10%;
+    height:5%;
+    bottom:6%;
+    left:25%;background-color:white;
+    transform:rotate(45deg);
+}
+
 .leaflet-popup-content {
     font-size: 1em !important;
 }
