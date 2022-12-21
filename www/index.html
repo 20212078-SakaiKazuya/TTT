@@ -269,10 +269,12 @@
 
         function picture(idx) {
             console.log('写真追加のボタンを押したぜ');
-            var pictPin = markers[idx];
+            var pictPin = markers[idx];// popup.getcontent()でＨＴＭＬげっとして後ろからの文字数をなんとかしてsrcのなかにpictをぶっこむ
+            var html = pictPin.getPopup().getContent();
+
             console.log(idx);
             navigator.camera.getPicture(function(pict){
-                img.src = 'data:image/jpeg;base64,' + pict;
+                pictPin.bindPopup(html.substring(0, html.length - 71) + 'data:image/jpeg;base64,' + pict + html.substring(html.length - 71, html.length));
             }, function(){}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                 destinationType : Camera.DestinationType.DATA_URL
