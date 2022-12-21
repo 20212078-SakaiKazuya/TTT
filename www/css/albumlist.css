@@ -11,6 +11,10 @@
     min-height: 100%;
     z-index: -1;
 }
+.parent2{
+    height: 520px;
+    overflow: auto;
+}
 .parent1{
     font-size: 18.4px;
     background: yellow;

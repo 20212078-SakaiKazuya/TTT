@@ -49,7 +49,7 @@ async function writeHTML(pinName,longitude,latitude,date) {
         htmlPinLists += '<li class="pinlist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
     }
     await console.log(htmlPinLists);
-    document.getElementById('pinlist').innerHTML = htmlPinLists;
+    document.getElementById('bookmarklist').innerHTML = htmlPinLists;
 }
 
 // ピンの一覧取得
@@ -66,6 +66,7 @@ window.onload = async function getPinList() {
     // ユーザーのピンを検索
     var Pin = ncmb.DataStore("pin");
     await Pin.equalTo("userName", nowUserName)
+        .equalTo("c_flg", true)
         .order("pinId")
         .fetchAll()
         .then(function (result) {
