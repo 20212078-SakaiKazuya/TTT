@@ -179,7 +179,7 @@
                 newPin = L.marker(marklatlng).addTo(mymap);
                 markers.push(newPin);
                 markinfo.push('新規ピン');
-                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture();"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
+                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + markinfo.indexOf('新規ピン') + ');"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
 
                 if (minlocation.getLatLng().lat == 0 && minlocation.getLatLng().lng == 0) {
                     minlocation.remove();
@@ -262,19 +262,18 @@
             }
 
             markinfo.push(pinname);
-            newPin.bindPopup("<div style='width:200px'>" + pinname + '</div><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + markinfo.indexOf(pinname) + ');"></td></tr></table><img src="" height="100"><span> </span><img src="images/piccount.png" width="20">');
+            newPin.bindPopup("<div style='width:200px'>" + pinname + '</div><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + markinfo.indexOf(pinname) + ');"></td></tr></table><img src="images/white.png" height="100"><span> </span><img src="images/piccount.png" width="20">');
 
             chk = false;
         }
 
         function picture(idx) {
-            console.log('写真追加のボタンを押したぜ');
             var pictPin = markers[idx];
             var html = pictPin.getPopup().getContent();
+            var quote = /table><img src="(.*?)"/g;
 
-            console.log(idx);
             navigator.camera.getPicture(function(pict){
-                pictPin.bindPopup(html.substring(0, html.length - 71) + 'data:image/jpeg;base64,' + pict + html.substring(html.length - 71, html.length));
+                pictPin.bindPopup(html.replace(quote, 'table><img src="data:image/jpeg;base64,' + pict + '"'));
             }, function(){}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                 destinationType : Camera.DestinationType.DATA_URL
