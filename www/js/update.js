@@ -28,16 +28,16 @@ async function userNameUpdate(){      // ユーザー名変更
     await ncmb.User.equalTo("userName", settingUserName)
              .fetchAll()
              .then(function(result) {
-                 console.log(result);
+                 console.log('検索結果: ' + result);
                  if(result.length != 0){
                     getUserName = result[0].userName;
                     console.log(getUserName);
                  }
              })
             .catch(function(e){
-                errorAlert();
+                errorSettingAlert();
             });
-    console.log(getUserName + " & " + settingUserName);
+    console.log(getUserName + " & " + settingUserName); // デバッグ
     // 入力チェック
     if(settingUserName == ""){
         errorName();
@@ -53,7 +53,7 @@ async function userNameUpdate(){      // ユーザー名変更
         })
         .catch(function(e) {
             // 更新失敗
-            errorAlert();
+            errorSettingAlert();
         });
     }
 }
@@ -73,7 +73,7 @@ function userPasswordUpdate(){      // パスワード変更
         })
         .catch(function(e) {
             // 更新失敗
-            errorAlert();
+            errorSettingAlert();
         });
     }
 }
@@ -85,15 +85,16 @@ async function userMailaddressUpdate(){       // メールアドレス変更
     await ncmb.User.equalTo("mailAddress", settingUserMailAddress)
              .fetchAll()
              .then(function(result) {
-                 console.log(result);
+                 console.log('検索結果: ' + result);
                  if(result.length != 0){
                     getUserMail = result[0].mailAddress;
                     console.log(getUserMail);
                  }
              })
             .catch(function(e){
-                errorAlert();
+                errorSettingAlert();
             });
+    console.log(getUserMail + " & " + settingUserMailAddress);  // デバッグ
     // 入力チェック
     if(settingUserMailAddress == ""){
         errorMailAddress();
@@ -109,7 +110,7 @@ async function userMailaddressUpdate(){       // メールアドレス変更
         })
         .catch(function(e) {
             // 更新失敗
-            errorAlert();
+            errorSettingAlert();
         });
     }
 }

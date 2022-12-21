@@ -115,7 +115,7 @@ function logoutAlert(){
 }
 
 // update.jsで使用
-function errorAlert(){      // エラーアラート
+function errorSettingAlert(){      // エラーアラート
     Swal.fire({
         title: 'エラーが発生しました',
         html: '設定画面に戻ります',
@@ -199,5 +199,16 @@ function updateUserMailAddress(){      // メールアドレス変更
     }).then((result) => {
         console.log('メールアドレスを変更');
         document.location.href = 'setting.html';
+    });
+}
+
+// pin.jsで使用
+function pinListError(){
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: 'マップに戻ります',
+        icon: 'warning'
+    }).then((result) => {
+        document.location.href = 'index.html';
     });
 }

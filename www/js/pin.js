@@ -1,39 +1,84 @@
 // This is a JavaScript file
 
 // ニフクラ接続
-// SDK初期化
 var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
 var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
 var ncmb = new NCMB(applicationKey, clientKey);
-// クラス,変数定義
-var Pin = new ncmb.DataStore("pin");    // pinクラス
-var pin = new Pin();
-var currentUser = new ncmb.User.getCurrentUser();   // ログインユーザー
-var nowUserName = currentUser.get("userName");      // ログインユーザー名
-var pinLists = [];    // ピン一覧
-var pinNames = [];    // ピンの名前
 
-// ログインユーザーのピンを取得
-window.onload = function getPin(){
-    // pinクラスの検索
-    // Pin.equalTo("userName", nowUserName)    // ピンの名前を取得
-    //     .order("pinName")
-    //     .fetchAll()
-    //     .then(function(results){
-    //         console.log('取得した値: ' + results);
-    //         for(var i = 0; i < results.length; i++){
-    //             pinNames[i] = results[i];
-    //         }
-    //     })
-    //     .catch(function(e){
-    //         console.log('データが取得できません');
-    //     });
-    pinNames = Pin.fetchById(nowUserName)
-                    .then(pinNames => {
-                        console.log(pinNames);
-                    })
-                    .catch(e => {
-                        console.log('データなし');
-                    });
+function getCurUser() {
+    // カレントユーザーの取得
+    var user = new ncmb.User();
+    var currentUserFlg = user.isCurrentUser();
+    if (currentUserFlg) {
+        var currentUser = ncmb.User.getCurrentUser();
+        var currentUserName = currentUser.get("userName");      // 現在のユーザー名
+        var currentUserPass = currentUser.get("password");      // 現在のパスワード
+        var currentUserMailAddress = currentUser.get("mailAddress");    // 現在のメールアドレス
+        console.log('現在のユーザー名: ' + currentUserName);
+        console.log('現在のメールアドレス: ' + currentUserMailAddress);
+        console.log('現在のパスワード: ' + currentUserPass);    // デバッグ
+    } else {
+        window.alert('エラーが発生しました¥nマップ画面に戻ります'); // FIX ME
+        document.locatin.href = 'index.html';
+    }
+    return currentUserName;
+}
 
+// 処理の一時停止
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// 日付の書式設定
+function settingDay(date){
+    var getDate; // 引数からの取り出し
+    var result; // 切り取り後の日付
+    var setDate = [];   // 変換後の日付格納用
+    // 日付の切り取り
+    for(var i = 0; i < date.length; i++){
+        getDate = date[i];
+        result = getDate.slice(0, 10);
+        setDate[i] = result;
+    }
+    return setDate;
+}
+
+// ピンの一覧取得
+window.onload = async function getPinList() {
+    await wait(100);    // 0.1秒停止
+    var nowUserName = await getCurUser();
+    var pinLists = [];  // ピンの緯度,経度
+    var pinNames = [];  // ピンの名前
+    var lat = [];   // 緯度
+    var long = [];  // 経度
+    var registDay = []; // 作成日付の取得用
+    var settingRegistDay = [];  // 変換後の日付
+    console.log(nowUserName);
+    // ユーザーのピンを検索
+    var Pin = ncmb.DataStore("pin");
+    await Pin.equalTo("userName", nowUserName)
+        .order("pinId")
+        .fetchAll()
+        .then(function (result) {
+            console.log('検索結果: ' + JSON.stringify(result));
+            console.log('件数: ' + result.length);
+            for (var i = 0; i < result.length; i++) {
+                pinLists[i] = result[i].map;
+                pinNames[i] = result[i].pinName;
+                registDay[i] = result[i].createDate;
+                lat[i] = pinLists[i].latitude;
+                long[i] = pinLists[i].longitude;
+            }
+            // 日付の切り取り
+            settingRegistDay = settingDay(registDay);
+            // デバッグ
+            console.log(pinLists);
+            console.log(pinNames);
+            console.log(lat);
+            console.log(long);
+            console.log(registDay);
+            console.log(settingRegistDay);
+        })
+        .catch(function (e) {
+            pinListError();
+        });
+    
 }
