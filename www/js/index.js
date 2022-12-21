@@ -21,12 +21,15 @@ function transLocation(url) {
 var tenkiChk = true;
 
 function tenki(tenki) {
+    var indian = document.getElementById('indian');
     if (tenki.src.substring(tenki.src.length - 18, tenki.src.lengh) == 'images/tenkiOn.png') {
         tenki.src = 'images/tenkiOff.png';
         tenkiChk = false;
+        indian.style.display = 'none';
     } else {
         tenki.src = 'images/tenkiOn.png';
         tenkiChk = true;
+        indian.style.display = 'block';
     }
 }
 

@@ -102,7 +102,7 @@
 
     <img src="images/camera.png" class="camera" onclick="camera();">
 
-    <img class="none indian" src="images/indian.png">
+    <img id="indian" src="images/indian.png">
     <div id="meteo" class="none"></div>
     <div class="none triangle"></div>
 
@@ -269,7 +269,7 @@
 
         function picture(idx) {
             console.log('写真追加のボタンを押したぜ');
-            var pictPin = markers[idx];// popup.getcontent()でＨＴＭＬげっとして後ろからの文字数をなんとかしてsrcのなかにpictをぶっこむ
+            var pictPin = markers[idx];
             var html = pictPin.getPopup().getContent();
 
             console.log(idx);
