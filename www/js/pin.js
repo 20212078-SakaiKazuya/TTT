@@ -41,9 +41,20 @@ function settingDay(date){
     return setDate;
 }
 
+// htmlの書き込み
+async function writeHTML(pinName,longitude,latitude,date) {
+    var htmlPinLists = '';  // html表示用
+    // html作成
+    for(var i = 0; i < date.length; i++){
+        htmlPinLists += '<li class="pinlist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
+    }
+    await console.log(htmlPinLists);
+    document.getElementById('pinlist').innerHTML = htmlPinLists;
+}
+
 // ピンの一覧取得
 window.onload = async function getPinList() {
-    await wait(100);    // 0.1秒停止
+    await wait(1000);    // 1秒停止
     var nowUserName = await getCurUser();
     var pinLists = [];  // ピンの緯度,経度
     var pinNames = [];  // ピンの名前
@@ -80,5 +91,6 @@ window.onload = async function getPinList() {
         .catch(function (e) {
             pinListError();
         });
-    
+    // htmlの書き換え
+    writeHTML(pinNames, long, lat, settingRegistDay);
 }

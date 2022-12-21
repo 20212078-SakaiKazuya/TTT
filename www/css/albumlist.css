@@ -20,7 +20,7 @@
 
 .parent3{
     position: relative;
-    top: 498px;
+    top: 620px;
     bottom: 0px;
 }
 a {
@@ -33,6 +33,6 @@ table{
     vertical-align: middle;
     text-align: center;
 }
-p{
+li{
     font-family: 'Kosugi', sans-serif;
 }
