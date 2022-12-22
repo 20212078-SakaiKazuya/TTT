@@ -11,17 +11,16 @@
     min-height: 100%;
     z-index: -1;
 }
-.parent2{
-    height: 520px;
-    overflow: auto;
-}
 .parent1{
     font-size: 18.4px;
     background: yellow;
     text-align: center;
     font-family: 'Kosugi', sans-serif;
 }
-
+.parent2{
+    height: 520px;
+    overflow: auto;
+}
 .parent3{
     position: relative;
     top: 620px;
@@ -39,4 +38,7 @@ table{
 }
 li{
     font-family: 'Kosugi', sans-serif;
+}
+.nopinlist{
+    list-style: none;
 }

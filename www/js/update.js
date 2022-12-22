@@ -20,8 +20,12 @@ if(currentUserFlg){
     window.alert('エラーが発生しました¥nマップ画面に戻ります'); // FIX ME
     document.locatin.href = 'index.html';
 }
+
+// 処理の一時停止
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
     
 async function userNameUpdate(){      // ユーザー名変更
+    await wait(1500);   // 1.5秒待ち
     var settingUserName = document.getElementById("username").value;    // 設定画面から値を取得
     var getUserName;    // 検索結果保持用
     // 新しいユーザー名が登録済ではないか確認

@@ -38,3 +38,6 @@ table{
 li{
     font-family: 'Kosugi', sans-serif;
 }
+.nopinlist{
+    list-style: none;
+}

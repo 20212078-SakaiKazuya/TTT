@@ -45,8 +45,12 @@ function settingDay(date){
 async function writeHTML(pinName,longitude,latitude,date) {
     var htmlPinLists = '';  // html表示用
     // html作成
-    for(var i = 0; i < date.length; i++){
-        htmlPinLists += '<li class="pinlist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
+    if(pinName == "") {
+        htmlPinLists += '<li class="nopinlist">まだ登録されていません！</li>';
+    } else {
+        for(var i = 0; i < date.length; i++){
+            htmlPinLists += '<li class="pinlist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
+        }
     }
     await console.log(htmlPinLists);
     document.getElementById('bookmarklist').innerHTML = htmlPinLists;
@@ -82,12 +86,12 @@ window.onload = async function getPinList() {
             // 日付の切り取り
             settingRegistDay = settingDay(registDay);
             // デバッグ
-            console.log(pinLists);
-            console.log(pinNames);
-            console.log(lat);
-            console.log(long);
-            console.log(registDay);
-            console.log(settingRegistDay);
+            console.log('pinLists: ' + pinLists);
+            console.log('pinNames: ' + pinNames);
+            console.log('lat: ' + lat);
+            console.log('long: ' + long);
+            console.log('registDay: ' + registDay);
+            console.log('settingRegistDay: ' + settingRegistDay);
         })
         .catch(function (e) {
             pinListError();
