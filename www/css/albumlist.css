@@ -23,7 +23,7 @@
 }
 .parent3{
     position: relative;
-    top: 620px;
+    top: 358px;
     bottom: 0px;
 }
 a {
@@ -108,4 +108,9 @@ li{
     -webkit-transform: scale3D(0, 0, 1);
             transform: scale3D(0, 0, 1);
   } 
+}
+/* Hide Loading Block */
+.loaded {
+  opacity: 0;
+  visibility: hidden;
 }

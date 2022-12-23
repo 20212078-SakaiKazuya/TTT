@@ -5,10 +5,7 @@ var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f9
 var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
 var ncmb = new NCMB(applicationKey, clientKey);
 var reader = new FileReader();
-reader.onload = function(e) {
-    var dataUrl = reader.result;
-    document.getElementById("albumlist").src = dataUrl;
-}
+
 
 function getCurUser() {
     // カレントユーザーの取得
@@ -39,23 +36,34 @@ async function writeHTML(pictureName) {
     if (pictureName == "") {
         htmlPictureLists += '<li class="nopicturelist">まだ登録されていません！</li>';
     } else {
-        // for(var i = 0; i < date.length; i++){   // fix
-        //     htmlPictureLists += '<li class="picturelist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
-        // }
-        // デバッグ
-        htmlPictureLists += '通った！';
+        for(var k = 0; k < pictureName.length; k++){
+            htmlPictureLists += '<img id="picture"' + k + ' width="100" height="100"></img>';
+        }
+        console.log('a');
+        document.getElementById("albumlist").innerHTML = htmlPictureLists;
+        for (var i = 0; i < pictureNames.length; i++) {
+            ncmb.File.download(pictureNames[i], "blob")
+                .then(function (fileData) {
+                    reader.onload = function (e) {
+                        var dataUrl = reader.result;
+                        document.getElementById("picture" + i).src = dataUrl;
+                    }
+                    reader.readAsDataURL(fileData);
+
+                })
+                .catch(function (e) {
+                    console.log('エラーが発生しました！');
+                });
+        }
     }
-    await console.log(htmlPictureLists);
-    document.getElementById('albumlist').innerHTML = htmlPictureLists;
+    console.log(htmlPictureLists);
 }
 
 // 写真の一覧取得
 window.onload = async function getPictureList() {
-    await wait(1000);    // 1秒停止
+    await wait(2000);    // 2秒停止
     var nowUserName = await getCurUser();
     var pictureNames = [];  // 写真の名前
-    var pictureData = [];   // ファイルストアから取得したデータの格納用
-    var binaryPictureData = []; // バイナリデータ格納用
     console.log(nowUserName);
     // ユーザーの写真を検索(データストア内)
     var Picture = ncmb.DataStore("picture");
@@ -74,17 +82,9 @@ window.onload = async function getPictureList() {
         .catch(function (e) {
             pinListError(); // fix
         });
-    // データの取得
-    for (var i = 0; i < pictureNames.length; i++) {
-        ncmb.File.download(pictureNames[i], "jpeg")
-            .then(function (fileData) {
-                reader.readAsDataURL(fileData);
-            })
-            .catch(function (e) {
-                console.log('エラーが発生しました！');
-            });
-    }
-    await console.log('binaryPictureData: ' + binaryPictureData);
     // htmlの書き換え
-    writeHTML(pictureNames);
+    await writeHTML(pictureNames);
+    console.log('終わり');
+    const spinner = document.getElementById('loading');
+    spinner.classList.add('loaded');
 }
