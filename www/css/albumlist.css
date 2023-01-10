@@ -43,7 +43,9 @@ li{
     list-style: none;
 }
 .picturelist{
-
+    margin: 7.5px;
+    height: 115px;
+    width: 115px;
 }
 
 

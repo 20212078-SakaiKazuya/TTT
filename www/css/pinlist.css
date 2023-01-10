@@ -38,6 +38,9 @@ table{
 li{
     font-family: 'Kosugi', sans-serif;
 }
+.nopinlist{
+    list-style: none;
+}
 /* Loading Block */
 #loading {
   width: 100vw;

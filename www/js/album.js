@@ -6,7 +6,6 @@ var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae77
 var ncmb = new NCMB(applicationKey, clientKey);
 var reader = new FileReader();
 
-
 function getCurUser() {
     // カレントユーザーの取得
     var user = new ncmb.User();
@@ -34,34 +33,38 @@ async function writeHTML(pictureName) {
     var htmlPictureLists = '';  // html表示用
     // html作成
     if (pictureName == "") {
-        htmlPictureLists += '<li class="nopicturelist">まだ登録されていません！</li>';
+        htmlPictureLists += '<ul><li class="nopicturelist">まだ登録されていません！</li></ul>';
+        document.getElementById('body').innerHTML = htmlPictureLists;
     } else {
+        // 画像の表示場所
         for(var k = 0; k < pictureName.length; k++){
-            htmlPictureLists += '<img id="picture"' + k + ' width="100" height="100"></img>';
+            htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src=""></img>';
         }
-        console.log('a');
-        document.getElementById("albumlist").innerHTML = htmlPictureLists;
-        for (var i = 0; i < pictureNames.length; i++) {
-            ncmb.File.download(pictureNames[i], "blob")
+        document.getElementById('body').innerHTML = htmlPictureLists;
+        console.log(htmlPictureLists);
+        // 画像のダウンロード
+        for (var i = 0; i < pictureName.length; i++) {
+            await ncmb.File.download(pictureName[i], "blob")
                 .then(function (fileData) {
+                    var pictureId = 'picture' + i;
+                    console.log(pictureId);
                     reader.onload = function (e) {
                         var dataUrl = reader.result;
-                        document.getElementById("picture" + i).src = dataUrl;
+                        document.getElementById(pictureId).src = dataUrl;
                     }
                     reader.readAsDataURL(fileData);
-
                 })
                 .catch(function (e) {
-                    console.log('エラーが発生しました！');
+                    window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                    document.location.href = 'index.html';
                 });
         }
     }
-    console.log(htmlPictureLists);
 }
 
 // 写真の一覧取得
 window.onload = async function getPictureList() {
-    await wait(2000);    // 2秒停止
+    await wait(1500);    // 1.5秒停止
     var nowUserName = await getCurUser();
     var pictureNames = [];  // 写真の名前
     console.log(nowUserName);
@@ -80,11 +83,12 @@ window.onload = async function getPictureList() {
             console.log('pictureNames: ' + pictureNames);
         })
         .catch(function (e) {
-            pinListError(); // fix
+            window.alert('エラーが発生しました¥nマップ画面に戻ります');
+            document.location.href = 'index.html';
         });
     // htmlの書き換え
     await writeHTML(pictureNames);
-    console.log('終わり');
+    console.log('読み込み完了');
     const spinner = document.getElementById('loading');
     spinner.classList.add('loaded');
 }
