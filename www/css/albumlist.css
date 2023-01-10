@@ -50,16 +50,27 @@ li{
 
 
 /* load画面のCSS */
+
+#loading {
+  width: 100vw;
+  height: 100vh;
+  transition: all 1s;
+  background-color: #FFED4C;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
 .sk-cube-grid {
   width: 70px;
   height: 70px;
-  margin: 100px auto;
+  margin: 300px auto;
 }
 
 .sk-cube-grid .sk-cube {
   width: 33%;
   height: 33%;
-  background-color: #FFED4C;
+  background-color: #cacaca;
   float: left;
   -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
           animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
