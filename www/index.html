@@ -19,7 +19,7 @@
     <script>
         // ニフクラ接続
         var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
-        var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771'
+        var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
         var ncmb = new NCMB(applicationKey, clientKey);
         var reader = new FileReader(); //画像読み込み
         // クラス,変数定義
@@ -27,41 +27,54 @@
         var album = ncmb.DataStore("alubum");
         var picture = ncmb.DataStore("picture");
         var pinList = [];
-        var pictureList = [];
         var albumList = [];
+        var pictureList = [];
         var userId;
         // ユーザー情報取得
-        // var currentUser = ncmb.User.getCurrentUser();
-        // if(currentUser) {
-        //     console.log("ログイン中のユーザーID：" + currentUser.get("userId"));
-        //     userId = currentUser.get("userId");     // ログインしているユーザーIDの取得
-        // } else {
-        //     console.log("未ログインまたは取得に失敗");
-        //     window.location.href = 'login.html';
-        // }
+        var currentUser = ncmb.User.getCurrentUser();
+        if (currentUser) {
+            console.log("ログイン中のユーザーID：" + currentUser.get("userName"));
+            userId = currentUser.get("userName"); // ログインしているユーザーIDの取得
+        } else {
+            console.log("未ログインまたは取得に失敗");
+            window.location.href = 'login.html';
+        }
         // ピン情報取得
-        pinList = pin.fetchById(userId)
-            .then(pinList => {
-                console.log("データあり");
+        pin.order(userId, true)
+            .fetchAll()
+            .then(function(results) {
+                console.log("pinあり");
+                for (i = 0; i < results.length; i++) {
+                    pinList.push(results[i]);
+                }
+                pinInstall();
             })
-            .catch(e => {
-                console.log("データなし");
+            .catch(function(err) {
+                console.log("pinなし");
             });
         // ユーザーの写真を取得
-        pictureList = picture.fetchById(userId)
-            .then(pictureList => {
-                console.log("データあり");
+        picture.order(userId, true)
+            .fetchAll()
+            .then(function(results) {
+                console.log("picあり");
+                for (i = 0; i < results.length; i++) {
+                    pictureList.push(results[i]);
+                }
             })
-            .catch(e => {
-                console.log("データなし");
+            .catch(function(err) {
+                console.log("picなし");
             });
         // ユーザーのアルバムを取得
-        albumList = album.fetchById(userId)
-            .then(albumList => {
-                console.log("データあり");
+        album.order(userId, true)
+            .fetchAll()
+            .then(function(results) {
+                console.log("albあり");
+                for (i = 0; i < results.length; i++) {
+                    albumList.push(results[i]);
+                }
             })
-            .catch(e => {
-                console.log("データなし");
+            .catch(function(err) {
+                console.log("albなし");
             });
     </script>
 
@@ -165,7 +178,7 @@
         function camera() {
             navigator.camera.getPicture(successCamera, errorCamera, {
                 sourceType: Camera.PictureSourceType.CAMERA,
-                destinationType : Camera.DestinationType.DATA_URL
+                destinationType: Camera.DestinationType.DATA_URL
             });
         }
 
@@ -173,7 +186,6 @@
             var minlocation = searchMarker();
 
             if (minlocation.getLatLng().distanceTo(marklatlng) <= 50) {
-                //TODO 最も近いマーカーに画像をつける
                 minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture();"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
             } else {
                 newPin = L.marker(marklatlng).addTo(mymap);
@@ -231,6 +243,27 @@
         //     }
         // }).addTo(mymap);
 
+        function pinInstall() {
+            for (i = 0; i < pinList.length; i++) {
+                newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude]).addTo(mymap);
+
+                var p;
+                // var pinalbum = [];
+                // album.equalTo('pinID', pinList[i].pinID)
+                //     .fetchAll()
+                //     .then(function(result){
+                //         pinalbum = result;
+                //         for (j = 0; j < pinalbum.length; j++) {
+                            
+                //     })
+                //     .catch(function(err){
+                //         console.log('error');
+                //     });
+
+                newPin.bindPopup("<div style='width:200px'>" + pinList[i].pinName + '</div><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + p + ');"></td></tr></table><img src="images/white.png" height="100"><span> </span><img src="images/piccount.png" width="20">');
+            }
+        }
+
         /* イベント処理 */
         var popup = L.popup();
         var chk = false;
@@ -272,11 +305,11 @@
             var html = pictPin.getPopup().getContent();
             var quote = /table><img src="(.*?)"/g;
 
-            navigator.camera.getPicture(function(pict){
+            navigator.camera.getPicture(function(pict) {
                 pictPin.bindPopup(html.replace(quote, 'table><img src="data:image/jpeg;base64,' + pict + '"'));
-            }, function(){}, {
+            }, function() {}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-                destinationType : Camera.DestinationType.DATA_URL
+                destinationType: Camera.DestinationType.DATA_URL
             });
         }
 
@@ -325,10 +358,12 @@
                 for (i = 1; i < markers.length; i++) {
                     if (min.getLatLng().distanceTo(marklatlng) > markers[i].getLatLng().distanceTo(marklatlng)) {
                         min = markers[i];
+                    }
                 }
-            }
             } catch {
-                var min = L.marker([0, 0], {opacity: 0}).addTo(mymap);
+                var min = L.marker([0, 0], {
+                    opacity: 0
+                }).addTo(mymap);
             }
             return min;
         }
