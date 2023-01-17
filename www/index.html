@@ -40,7 +40,7 @@
             window.location.href = 'login.html';
         }
         // ピン情報取得
-        pin.order(userId, true)
+        pin.equalTo('userName', userId)
             .fetchAll()
             .then(function(results) {
                 console.log("pinあり");
@@ -53,7 +53,7 @@
                 console.log("pinなし");
             });
         // ユーザーの写真を取得
-        picture.order(userId, true)
+        picture.equalTo('userName', userId)
             .fetchAll()
             .then(function(results) {
                 console.log("picあり");
@@ -65,7 +65,7 @@
                 console.log("picなし");
             });
         // ユーザーのアルバムを取得
-        album.order(userId, true)
+        album.equalTo('userName', userId)
             .fetchAll()
             .then(function(results) {
                 console.log("albあり");
@@ -143,7 +143,10 @@
         function onLocationFound(e) {
             marklatlng = e.latlng;
             if (first == 0) {
-                mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+                if (localStorage.getItem('latitude') == null) {
+                    console.log('null');
+                    mymap.setView([e.latlng.lat, e.latlng.lng], 18);
+                } else {localStorage.clear();}
                 mark = L.marker(e.latlng, {
                     icon: genzai
                 }).addTo(mymap);
@@ -367,6 +370,14 @@
             }
             return min;
         }
+
+        if (localStorage.getItem('latitude') != null) {
+            var la = localStorage.getItem('latitude');
+            var ln = localStorage.getItem('longitude');
+            mymap.setView([la, ln], 18);
+        }
+
+
     </script>
 </body>
 
