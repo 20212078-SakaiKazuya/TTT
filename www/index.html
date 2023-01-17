@@ -263,7 +263,7 @@
                 //         console.log('error');
                 //     });
 
-                newPin.bindPopup("<div style='width:200px'>" + pinList[i].pinName + '</div><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + p + ');"></td></tr></table><img src="images/white.png" height="100"><span> </span><img src="images/piccount.png" width="20">');
+                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><button onclick="name(' + pinList[i].pinID + ');">変</button></td><td><button onclick="bookmark(' + pinList[i].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="picture(' + p + ');"></td></tr></table><img src="images/white.png" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + pinList[i].pinID + ')">削</button>');
             }
         }
 
