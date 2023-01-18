@@ -220,18 +220,18 @@ function formNewPinName(){
         showCancelButton: 'true',
         input: 'text',
         inputPlaceholder: 'ここに入力'
-        }).then((result) => {
-            if(result.value.length != 0){
-                return result.value;
-            } else {
-                Swal.fire({
-                    html: 'キャンセルしました',
-                    icon: 'success'
-                }).then((result) => {
-                    console.log('ピンの名前の変更をキャンセル');
-                });
-            }
-        });
+    }).then((result) => {
+        if(result.value.length != 0){
+            return result.value;
+        } else {
+            Swal.fire({
+                html: 'キャンセルしました',
+                icon: 'success'
+            }).then((result) => {
+                console.log('ピンの名前の変更をキャンセル');
+            });
+        }
+    });
 }
 function resultPinReName(){
     Swal.fire({
