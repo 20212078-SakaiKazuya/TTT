@@ -94,6 +94,7 @@
 </head>
 
 <body>
+    
 
     <!-- 地図を表示するブロック要素 -->
     <div id="mymap"></div>
@@ -132,6 +133,7 @@
     <div id="meteo" class="none"></div>
     <div class="none triangle"></div>
 
+    <script src="js/updateDataStore.js"></script>
     <script src="js/index.js"></script>
     <script>
         var mymap = L.map("mymap", {
@@ -291,7 +293,10 @@
 
                 getPict(pinList[i].pinID);
 
-                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><button onclick="pinRename(' + pinList[i].pinID + ',' + userId + ');">変</button></td><td><button onclick="bookmark(' + pinList[i].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + 2 + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + pinList[i].pinID + ')">削</button>');
+                var id = "'" + userId + "'";
+
+                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><button onclick="pinRename(' + pinList[i].pinID + ',' + id + ');">変</button></td><td><button onclick="bookmark(' + pinList[i].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + 2 + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + pinList[i].pinID + ')">削</button>');
+                console.log(newPin.getPopup().getContent());
             }
         }
 
@@ -405,7 +410,7 @@
             mymap.setView([la, ln], 18);
         }
     </script>
-    <script src="js/updateDataStore.js"></script>
+    
 </body>
 
 </html>
