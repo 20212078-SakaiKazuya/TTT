@@ -86,7 +86,7 @@
                     resultData(result[0].pinID, result[0].data);
                 })
                 .catch(function(e) {
-                    console.log('pict error   ' + e);
+                    console.log('画像がないマーカー: ' + pid);
                 });
         }
     </script>
@@ -261,14 +261,13 @@
         // }).addTo(mymap);
 
         function resultData(pinId, name) {
-            console.log(markers);
             for (i = 0; i < pinList.length; i++) {
                 if (pinList[i].pinID == pinId) {
                     ncmb.File.download(name, "blob")
                         .then(function(fileData) {
                             reader.onload = function(e) {
                                 var dataUrl = reader.result;
-                                var pictPin = markers.pinId;
+                                var pictPin = markers[pinId];
                                 var html = pictPin.getPopup().getContent();
                                 var quote = /table><img src="(.*?)"/g;
 
@@ -288,12 +287,11 @@
                 newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude]).addTo(mymap);
                 var pinid = pinList[i].pinID;
                 markers[pinid] = newPin;
-                console.log(markers[pinid]);
                 console.log('pinInstall: ' + pinList[i].pinID);
 
                 getPict(pinList[i].pinID);
 
-                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><button onclick="name(' + pinList[i].pinID + ');">変</button></td><td><button onclick="bookmark(' + pinList[i].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + 2 + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + pinList[i].pinID + ')">削</button>');
+                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><button onclick="pinRename(' + pinList[i].pinID + ',' + userId + ');">変</button></td><td><button onclick="bookmark(' + pinList[i].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + 2 + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + pinList[i].pinID + ')">削</button>');
             }
         }
 
@@ -407,6 +405,7 @@
             mymap.setView([la, ln], 18);
         }
     </script>
+    <script src="js/updateDataStore.js"></script>
 </body>
 
 </html>
