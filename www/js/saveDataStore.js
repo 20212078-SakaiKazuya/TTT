@@ -45,7 +45,7 @@ async function savePin(latitude, longitude) {
     var pin = new Pin();
     console.log('a');
 
-    // pinIDの取得,設定
+    // pinIDの取得,設定 fix
     await Pin.exists("userName")
         .order("pinID")
         .fetchAll()

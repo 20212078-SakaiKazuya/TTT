@@ -212,3 +212,32 @@ function pinListError(){
         document.location.href = 'index.html';
     });
 }
+
+// updateDataStore.jsで使用
+function formNewPinName(){
+    Swal.fire({
+        html: '新しい名前を入力してください',
+        showCancelButton: 'true',
+        input: 'text',
+        inputPlaceholder: 'ここに入力'
+        }).then((result) => {
+            if(result.value.length != 0){
+                return result.value;
+            } else {
+                Swal.fire({
+                    html: 'キャンセルしました',
+                    icon: 'success'
+                }).then((result) => {
+                    console.log('ピンの名前の変更をキャンセル');
+                });
+            }
+        });
+}
+function resultPinReName(){
+    Swal.fire({
+        title: '更新しました！',
+        html: 'ピンの名前を変更しました'
+    }).then((result) => {
+        console.log('ピンの名前の変更完了');
+    });
+}
