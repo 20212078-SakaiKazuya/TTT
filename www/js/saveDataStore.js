@@ -25,25 +25,25 @@ function getCurUser() {
 }
 
 // 処理の一時停止
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // pin
 async function savePin(latitude, longitude) {
     await wait(1000);   // 1秒待機
     var nowUserName = await getCurUser();   // ユーザー名
-    //var pinName = document.getElementById("pinname").value; // ピンの名前
-    //var pinLat = latitude;  // 緯度
-    //var pinLong = longitude; // 経度
+    var pinName = document.getElementById("pinname").value; // ピンの名前
+    var pinLat = latitude;  // 緯度
+    var pinLong = longitude; // 経度
     var pinId;  // pinID
-    var c_flg = false;  // ブックマークフラグ
+    var bookmark_flg = false;  // ブックマークフラグ
+    var dis_flg = true;     // 表示するかしないか
 
     // 緯度,経度の書式設定
-    var map = pinLong + ',' + pinLat;
+    var map = "{"__type":"GeoPoint","longitude":' + pinLong + ',"latitude":' + pinLat + "}";
 
     // クラス定義
     var Pin = ncmb.DataStore("pin");
     var pin = new Pin();
-    console.log('a');
 
     // pinIDの取得,設定 fix
     await Pin.exists("userName")
@@ -51,7 +51,7 @@ async function savePin(latitude, longitude) {
         .fetchAll()
         .then(function (result) {
             if (result.length == 0) {
-                pinId = 0;
+                pinId = 1;
                 console.log('初めての登録');
             } else {
                 pinId = result[result.length - 1].pinID + 1;
@@ -65,15 +65,18 @@ async function savePin(latitude, longitude) {
         });
     // データクラスに保存
     await pin.set("pinID", pinId)
-        .set("c_flg", c_flg)
+        .set("bookmark_flg", bookmark_flg)
+        .set("dis_flg", dis_flg)
         .set("pinName", pinName)
         .set("map", map)
         .set("userName", nowUserName)
         .save()
         .then(function (pin) {
+            console.log('保存内容: ' + JSON.stringify(pin));
             console.log('保存しました');
         })
         .catch(function (err) {
+            console.log('保存内容: ' + JSON.stringify(pin));
             console.log('保存できませんでした');
         });
 }
