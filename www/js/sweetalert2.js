@@ -220,13 +220,12 @@ function formNewPinName(){
         showCancelButton: 'true',
         input: 'text',
         inputPlaceholder: 'ここに入力'
-    }).then((result) => {
-        if(result.value.length != 0){
-            return result.value;
+    }).then(function(result) {
+        if(result.value){
+            getAlertValue(result.value);
         } else {
             Swal.fire({
                 html: 'キャンセルしました',
-                icon: 'success'
             }).then((result) => {
                 console.log('ピンの名前の変更をキャンセル');
             });
@@ -239,5 +238,27 @@ function resultPinReName(){
         html: 'ピンの名前を変更しました'
     }).then((result) => {
         console.log('ピンの名前の変更完了');
+        window.location.reload();
+    });
+}
+
+// deleteDataStore.jsで使用
+function truePinDelete() {
+    Swal.fire({
+        title: '削除しました！',
+        html: '選択したピンを削除しました',
+        icon: 'success'
+    }).then((result) => {
+        console.log('ピンの削除完了');
+        window.location.reload();
+    });
+}
+function falsePinDelete() {
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: '削除をキャンセルしました',
+        icon: 'warning'
+    }).then((result) => {
+        console.log('ピンの削除失敗');
     });
 }

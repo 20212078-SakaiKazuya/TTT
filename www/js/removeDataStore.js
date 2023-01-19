@@ -25,32 +25,38 @@
 // }
 
 // 処理の一時停止
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+// const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// ピンの名前変更
-async function pinRename(pinId) {
-    var pinID = pinId;          // pinID
-    // 変更後の名前の入力 fix
-    var newPinName = formNewPinName();
-    console.log(newPinName);
-    // 新しい名前が入力された時、ピンの名前を変更する
-    if (newPinName.length != 0) {
-        var Pin = ncmb.DataStore("pin");
-        var pin = new Pin();
-        // データの取得、更新
-        await Pin.equalTo("pinID", pinID)
-            .fetchAll()
-            .then(function(pin) {
-                pin.set("pinName", newPinName);
-                console.log('ピンの名前更新成功');
-                return pin.update();
-            })
-            .catch(function(err) {
-                console.log('ピンの名前更新失敗');
-            });
-        // デバッグ
-        console.log('実行結果:' + JSON.stringify(pin));
-        resultPinReName();
-    }
-
+// ピンの削除
+async function pinRemove(pinId) {
+    var pinID = pinId;      // pinID
+    // 対象のデータを検索
+    var Pin = ncmb.DataStore("pin");
+    var pin = new Pin();
+    await Pin.equalTo("pinID", pinID)
+        .fetchAll()
+        .then(function (pin) {
+            // デバッグ
+            console.log('検索結果:' + JSON.stringify(pin));
+            if(pin.length != 0) {
+                pin.delete()
+                    .then(function(result) {
+                        console.log('削除完了');
+                        truePinDelete();
+                    })
+                    .catch(function(err) {
+                        console.log('削除失敗');
+                        falsePinDelete();
+                    });
+            }
+        })
+        .catch(function(err) {
+            console.log('データが見つかりません');
+        });
+}
+     
+// 写真の削除
+function pictureDelete(pictureId) {
+    var pictureID = pictureId;  // pictureID
+    
 }
