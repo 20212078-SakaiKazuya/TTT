@@ -33,33 +33,19 @@ async function pinRemove(pinId) {
     // 対象のデータを検索
     console.log('pinID:' + pinID);
     var Pin = ncmb.DataStore("pin");
-    var pin = new Pin();
     await Pin.equalTo("pinID", pinID)
-        .fetchAll()
-        .then(function (result) {
+        .fetch()
+        .then(function (pin) {
             // デバッグ
-            console.log('検索結果:' + JSON.stringify(result));
-            // pinに保存
-            pin.set("dis_flg", result[0].dis_flg)
-                .save()
-                .then(function(pin) {
-                    console.log("pin:" + JSON.stringify(pin));
-                    pin.set("dis_flg", false);
-                    truePinDelete();
-                    console.log('削除完了');
-                    return pin.update();
-                })
-                .catch(function (err) {
-                    console.log('削除失敗');
-                    falsePinDelete();
-                })
-                .catch(function(result) {
-                    console.log('保存失敗');
-                });
+            console.log('検索結果:' + JSON.stringify(pin));
+            pin.set("dis_flg", false);
+            return pin.update();
         })
         .catch(function (err) {
+            falsePinDelete();
             console.log('データが見つかりません');
         });
+    truePinDelete();
 }
 
 // 写真の削除
