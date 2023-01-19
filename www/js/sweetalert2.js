@@ -214,7 +214,7 @@ function pinListError(){
 }
 
 // updateDataStore.jsで使用
-function formNewPinName(){
+function pinRename(pinid){
     Swal.fire({
         html: '新しい名前を入力してください',
         showCancelButton: 'true',
@@ -222,7 +222,7 @@ function formNewPinName(){
         inputPlaceholder: 'ここに入力'
     }).then(function(result) {
         if(result.value){
-            getAlertValue(result.value);
+            pinRenameReceive(pinid, result.value);
         } else {
             Swal.fire({
                 html: 'キャンセルしました',

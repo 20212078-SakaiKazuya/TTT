@@ -28,18 +28,14 @@
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // ピンの名前変更
-async function pinRename(pinId) {
+async function pinRenameReceive(pinId, newPinName) {
     var pinID = pinId;          // pinID
-    // 変更後の名前の入力 fix
-    var newPinName = formNewPinName();
-    console.log(newPinName);
     // 新しい名前が入力された時、ピンの名前を変更する
     if (newPinName.length != 0) {
         var Pin = ncmb.DataStore("pin");
-        var pin = new Pin();
         // データの取得、更新
         await Pin.equalTo("pinID", pinID)
-            .fetchAll()
+            .fetch()
             .then(function(pin) {
                 pin.set("pinName", newPinName);
                 console.log('ピンの名前更新成功');
