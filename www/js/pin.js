@@ -70,6 +70,7 @@ window.onload = async function getPinList() {
     // ユーザーのピンを検索
     var Pin = ncmb.DataStore("pin");
     await Pin.equalTo("userName", nowUserName)
+        .equalTo("dis_flg", true)
         .order("pinId")
         .fetchAll()
         .then(function (result) {

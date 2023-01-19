@@ -41,6 +41,7 @@
         }
         // ピン情報取得
         pin.equalTo('userName', userId)
+            .equalTo('dis_flg', true)
             .fetchAll()
             .then(function(results) {
                 console.log("pinあり");
@@ -79,15 +80,12 @@
 
         function getPict(pid) {
             var picture = ncmb.DataStore("picture");
-            console.log('getPict on');
             picture.equalTo('pinID', pid)
                 .fetchAll()
                 .then(function(result) {
                     resultData(result[0].pinID, result[0].data, result.length);
                 })
-                .catch(function(e) {
-                    console.log('画像がないマーカー: ' + pid);
-                });
+                .catch(function(e) {});
         }
     </script>
 
@@ -339,7 +337,7 @@
                 var pinname = '新規ピン';
             }
 
-            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinname + '</div></td><td><button onclick="pinRename(' + (key + 1) + ');">変</button></td><td><button onclick="bookmark(' + (key + 1) + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + (key + 1) + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><button onclick="del(' + (key + 1) + ')">削</button>');
+            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinname + '</div></td><td><img src="images/updateNameBt.png" width="15" onclick="pinRename(' + (key + 1) + ');"></td><td><button onclick="bookmark(' + (key + 1) + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + (key + 1) + ');"></td></tr></table><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"><img src="images/delPinBt.png" width="15" onclick="del(' + (key + 1) + ')">');
 
             chk = false;
         }
