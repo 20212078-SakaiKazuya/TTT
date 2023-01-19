@@ -90,3 +90,10 @@ window.addEventListener('load', function () {
 
     request.send();
 });
+
+
+// htmlの書き換え
+    window.onload = function() {
+  const spinner = document.getElementById('loading');
+  spinner.classList.add('loaded');
+}
