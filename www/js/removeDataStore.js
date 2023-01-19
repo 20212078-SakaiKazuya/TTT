@@ -36,17 +36,25 @@ async function pinRemove(pinId) {
     var pin = new Pin();
     await Pin.equalTo("pinID", pinID)
         .fetchAll()
-        .then(function (pin) {
+        .then(function (result) {
             // デバッグ
-            console.log('検索結果:' + JSON.stringify(pin));
-            pin.delete()
-                .then(function (result) {
-                    console.log('削除完了');
+            console.log('検索結果:' + JSON.stringify(result));
+            // pinに保存
+            pin.set("dis_flg", result[0].dis_flg)
+                .save()
+                .then(function(pin) {
+                    console.log("pin:" + JSON.stringify(pin));
+                    pin.set("dis_flg", false);
                     truePinDelete();
+                    console.log('削除完了');
+                    return pin.update();
                 })
                 .catch(function (err) {
                     console.log('削除失敗');
                     falsePinDelete();
+                })
+                .catch(function(result) {
+                    console.log('保存失敗');
                 });
         })
         .catch(function (err) {
