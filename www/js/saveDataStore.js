@@ -39,7 +39,7 @@ async function savePin(latitude, longitude) {
     var dis_flg = true;     // 表示するかしないか
 
     // 緯度,経度の書式設定
-    var map = "{"__type":"GeoPoint","longitude":' + pinLong + ',"latitude":' + pinLat + "}";
+    var map = {"__type":"GeoPoint","longitude":pinLong,"latitude":pinLat};
 
     // クラス定義
     var Pin = ncmb.DataStore("pin");
@@ -74,9 +74,14 @@ async function savePin(latitude, longitude) {
         .then(function (pin) {
             console.log('保存内容: ' + JSON.stringify(pin));
             console.log('保存しました');
+
+            newPop.remove();
+            var newPin = L.marker([map.latitude, map.longitude]).addTo(mymap);
+            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><button onclick="bookmark(' + pinId + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinId + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="pinRemove(' + pinId + ')">');
+            markers[pinId] = newPin;
         })
         .catch(function (err) {
-            console.log('保存内容: ' + JSON.stringify(pin));
+            console.log('エラー内容: ' + err);
             console.log('保存できませんでした');
         });
 }

@@ -143,6 +143,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.15/dist/sweetalert2.css" />
     <script src="js/updateDataStore.js"></script>
     <script src="js/removeDataStore.js"></script>
+    <script src="js/saveDataStore.js"></script>
     <script src="js/sweetalert2.js"></script>
     <script src="js/index.js"></script>
     <script>
@@ -153,7 +154,6 @@
         first = 0;
         var marklatlng;
         var markers = {};
-        var markinfo = [];
 
         /* アイコンの設定 */
         var genzai = L.icon({
@@ -275,7 +275,7 @@
 
                 var id = "'" + userId + "'";
 
-                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><button onclick="bookmark(' + pinid + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:30%" onclick="pinRemove(' + pinid + ')">');
+                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><button onclick="bookmark(' + pinid + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="pinRemove(' + pinid + ')">');
             }
         }
 
@@ -286,7 +286,7 @@
         function onMapClick(e) {
             if (!chk) {
                 newPop = popup.setLatLng(e.latlng).setContent(
-                    "<p>この場所にピンを立てますか？</p><input id='pinname' type='text' placeholder='新規ピンの名前' maxlength='15' style='width:90%;'><br><br><button style='width:100%;' onclick='clickMarker(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
+                    "<p>この場所にピンを立てますか？</p><input id='pinname' type='text' placeholder='新規ピンの名前' maxlength='15' style='width:90%;'><br><br><button style='width:100%;' onclick='savePin(" + e.latlng.lat + "," + e.latlng.lng + ");'>YES"
                 ).openOn(mymap);
                 chk = true;
             } else {
@@ -295,25 +295,6 @@
         }
 
         var click = mymap.on('click', onMapClick);
-
-        function clickMarker(la, ln) {
-            newPin = L.marker([la, ln]).addTo(mymap);
-            var key = Object.keys(markers)[Object.keys(markers).length - 1];
-            markers[key + 1] = newPin;
-            try {
-                newPop.remove();
-                var pinname = document.getElementById('pinname').value;
-                if (pinname.length == 0 || pinname == null) {
-                    pinname = '新規ピン';
-                }
-            } catch (e) {
-                var pinname = '新規ピン';
-            }
-
-            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinname + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + (key + 1) + ');"></td><td><button onclick="bookmark(' + (key + 1) + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td>' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + (key + 1) + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + (key + 1) + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:30%" onclick="del(' + (key + 1) + ')">');
-
-            chk = false;
-        }
 
         function pictureSelect(idx) {
             var pictPin = markers[idx];
@@ -329,6 +310,7 @@
         }
 
         mymap.on('popupopen', function() {
+            chk = true;
             if (tenkiChk) {
                 var request = new XMLHttpRequest();
                 var lat = click._popup._latlng.lat;
