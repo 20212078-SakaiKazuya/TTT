@@ -1,9 +1,9 @@
 // This is a JavaScript file
 
 // ニフクラ接続
-// var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
-// var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
-// var ncmb = new NCMB(applicationKey, clientKey);
+var applicationKey = '31f236de7d5148a5cb93c53b52bfdd0fb4469aa6a3f4f0e8a39afa23f917241e';
+var clientKey = 'b59e281093d74f2fcb80e83a1aaf70d106e73e6059b429e5f39298a9884ae771';
+var ncmb = new NCMB(applicationKey, clientKey);
 
 // function getCurUser() {
 //     // カレントユーザーの取得
@@ -49,4 +49,24 @@ async function pinRenameReceive(pinId, newPinName) {
         resultPinReName();
     }
 
+}
+
+// ブックマークフラグの変更
+async function changeBookmark(pinId) {
+    var pinID = pinId;  // pinID
+    // bookmark_flgをtrueに変更
+    var Pin = ncmb.DataStore("pin");
+    //データの取得、更新
+    Pin.equalTo("pinID", pinID)
+    .fetch()
+    .then(function(pin) {
+        pin.set("bookmark_fig", true);
+        console.log('ブックマークフラグの更新成功');
+        return pin.update();
+    })
+    .catch(function(err) {
+        console.log('ブックマークフラグの更新失敗');
+        falseBookmark();
+    });
+    trueBookmark();
 }

@@ -232,7 +232,23 @@ function pinRename(pinid){
         }
     });
 }
-function resultPinReName(){
+function changeBookmarkAlert(pinId) {
+    Swal.fire({
+        html: 'ブックマークに登録しますか？',
+        showCancelButton: 'true'
+    }).then((result) => {
+        if(result.value) {
+            changeBookmark(pinId);
+        } else {
+            Swal.fire({
+                html: 'キャンセルしました',
+            }).then((result) => {
+                console.log('ブックマークの登録をキャンセル');
+            });
+        }
+    });
+}
+function resultPinReName() {
     Swal.fire({
         title: '更新しました！',
         html: 'ピンの名前を変更しました'
@@ -241,8 +257,43 @@ function resultPinReName(){
         window.location.reload();
     });
 }
+function trueBookmark() {
+    Swal.fire({
+        html: 'ブックマークに登録しました',
+        icon: 'success'
+    }).then((result) => {
+        console.log('ブックマークフラグ更新完了');
+    });
+}
+function falseBookmark() {
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: '登録をキャンセルしました',
+        icon: 'warning'
+    }).then((result) => {
+        console.log('ブックマークフラグ更新失敗');
+    }); 
+}
 
 // deleteDataStore.jsで使用
+function confirmPinDelete(pinId){
+    var pinID = pinid;
+    Swal.fire({
+        html: 'このピンを削除しますか？',
+        showCancelButton: 'true'
+        }).then((result) => {
+            if(result.value) {
+                pinRemove(pinID);
+            } else {
+                Swal.fire({
+                    title: 'キャンセルしました',
+                    icon: 'success'
+                    }).then((result) => {
+                        console.log('ピンの削除キャンセル');
+                    });
+            }
+        });
+}
 function truePinDelete() {
     Swal.fire({
         title: '削除しました！',
