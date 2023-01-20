@@ -60,7 +60,7 @@ async function changeBookmark(pinId) {
     Pin.equalTo("pinID", pinID)
     .fetch()
     .then(function(pin) {
-        pin.set("bookmark_fig", true);
+        pin.set("bookmark_flg", true);
         console.log('ブックマークフラグの更新成功');
         return pin.update();
     })

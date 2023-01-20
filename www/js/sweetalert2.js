@@ -277,7 +277,7 @@ function falseBookmark() {
 
 // deleteDataStore.jsで使用
 function confirmPinDelete(pinId){
-    var pinID = pinid;
+    var pinID = pinId;
     Swal.fire({
         html: 'このピンを削除しますか？',
         showCancelButton: 'true'
@@ -286,8 +286,7 @@ function confirmPinDelete(pinId){
                 pinRemove(pinID);
             } else {
                 Swal.fire({
-                    title: 'キャンセルしました',
-                    icon: 'success'
+                    html: 'キャンセルしました',
                     }).then((result) => {
                         console.log('ピンの削除キャンセル');
                     });

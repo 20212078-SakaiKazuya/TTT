@@ -49,7 +49,7 @@ async function writeHTML(pinName,longitude,latitude,date) {
         htmlPinLists += '<li class="nopinlist">まだ登録されていません！</li>';
     } else {
         for(var i = 0; i < date.length; i++){
-            htmlPinLists += '<li class="pinlist" onclick="saveLocalStorage(' + longitude[i] + ',' + latitude[i] + ');">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + ' 緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
+            htmlPinLists += '<li class="pinlist" onclick="saveLocalStorage(' + longitude[i] + ',' + latitude[i] + ');">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + '<br>緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
         }
     }
     await console.log(htmlPinLists);
