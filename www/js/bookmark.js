@@ -98,4 +98,8 @@ window.onload = async function getPinList() {
         });
     // htmlの書き換え
     writeHTML(pinNames, long, lat, settingRegistDay);
+    
+    const spinner = document.getElementById('loading');
+    spinner.classList.add('loaded');
+
 }
