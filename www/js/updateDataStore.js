@@ -52,21 +52,72 @@ async function pinRenameReceive(pinId, newPinName) {
 }
 
 // ブックマークフラグの変更
-async function changeBookmark(pinId) {
+// 現在のフラグを確認
+async function confirmBookmarkFlg(pinId) {
+    var pinID = pinId;      // pinID
+    var nowBookmarkFlg;     // bookmark_flg
+    // 現在設定されているbookmark_flgを取得する
+    var Pin = ncmb.DataStore("pin");
+    // データを取得
+    await Pin.equalTo("pinID", pinID)
+        .fetch()
+        .then(function(result) {
+            nowBookmarkFlg = result.bookmark_flg;
+            console.log('フラグの取得成功');
+        })
+        .catch(function(err) {
+            console.log('フラグの取得失敗');
+        });
+    console.log('nowBookmarkFlg:' + nowBookmarkFlg);
+    // フラグによって遷移
+    if(nowBookmarkFlg) {
+        changeReleaseBookmarkAlert(pinID);
+    } else {
+        changeTrueBookmarkAlert(pinID);
+    }
+}
+// 登録
+async function trueChangeBookmark(pinId) {
     var pinID = pinId;  // pinID
+    console.log('pinID:' + pinID);
     // bookmark_flgをtrueに変更
     var Pin = ncmb.DataStore("pin");
     //データの取得、更新
-    Pin.equalTo("pinID", pinID)
+    await Pin.equalTo("pinID", pinID)
     .fetch()
     .then(function(pin) {
+        console.log('bookmark_flg:' + pin.bookmark_flg);
         pin.set("bookmark_flg", true);
-        console.log('ブックマークフラグの更新成功');
+        console.log('ブックマークフラグの更新成功(true)');
         return pin.update();
     })
     .catch(function(err) {
-        console.log('ブックマークフラグの更新失敗');
+        console.log('エラー内容:' + err);
+        console.log('ブックマークフラグの更新失敗(true)');
         falseBookmark();
     });
     trueBookmark();
+}
+// 解除
+async function releaseChangeBookmark(pinId) {
+    var pinID = pinId;  // pinID
+    console.log('pinID:' + pinID);
+    // bookmark_flgをfalseに変更
+    var Pin = ncmb.DataStore("pin");
+    // データの取得、更新
+    await Pin.equalTo("pinID", pinID)
+        .fetch()
+        .then(function(pin) {
+            console.log('検索結果:' + JSON.stringify(pin));
+            console.log('bookmark_flg:' + pin.bookmark_flg);
+            pin.set("bookmark_flg", false);
+            console.log('ブックマークフラグの更新成功(false)');
+            return pin.update();
+        })
+        .catch(function(err) {
+            console.log('エラー内容:' + err);
+            console.log('ブックマークフラグの更新失敗(false)');
+            falseBookmark();
+        });
+    releaseBookmark();
 }

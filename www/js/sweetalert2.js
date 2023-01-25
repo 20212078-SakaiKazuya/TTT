@@ -232,13 +232,13 @@ function pinRename(pinid){
         }
     });
 }
-function changeBookmarkAlert(pinId) {
+function changeTrueBookmarkAlert(pinId) {
     Swal.fire({
         html: 'ブックマークに登録しますか？',
         showCancelButton: 'true'
     }).then((result) => {
         if(result.value) {
-            changeBookmark(pinId);
+            trueChangeBookmark(pinId);
         } else {
             Swal.fire({
                 html: 'キャンセルしました',
@@ -248,10 +248,27 @@ function changeBookmarkAlert(pinId) {
         }
     });
 }
+function changeReleaseBookmarkAlert(pinId) {
+    Swal.fire({
+        html: 'ブックマークを解除しますか？',
+        showCancelButton: 'true'
+    }).then((result) => {
+        if(result.value) {
+            releaseChangeBookmark(pinId);
+        } else {
+            Swal.fire({
+                html: 'キャンセルしました',
+            }).then((result) => {
+                console.log('ブックマークの解除をキャンセル');
+            });
+        }
+    });
+}
 function resultPinReName() {
     Swal.fire({
         title: '更新しました！',
-        html: 'ピンの名前を変更しました'
+        html: 'ピンの名前を変更しました',
+        icon: 'success'
     }).then((result) => {
         console.log('ピンの名前の変更完了');
         window.location.reload();
@@ -265,10 +282,18 @@ function trueBookmark() {
         console.log('ブックマークフラグ更新完了');
     });
 }
+function releaseBookmark() {
+    Swal.fire({
+        html: 'ブックマークを解除しました',
+        icon: 'success'
+    }).then((result) => {
+        console.log('ブックマークフラグ更新完了');
+    });
+}
 function falseBookmark() {
     Swal.fire({
         title: 'エラーが発生しました',
-        html: '登録をキャンセルしました',
+        html: '変更をキャンセルしました',
         icon: 'warning'
     }).then((result) => {
         console.log('ブックマークフラグ更新失敗');

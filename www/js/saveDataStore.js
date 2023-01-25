@@ -77,7 +77,7 @@ async function savePin(latitude, longitude) {
 
             newPop.remove();
             var newPin = L.marker([map.latitude, map.longitude]).addTo(mymap);
-            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><button onclick="changeBookmarkAlert(' + pinId + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinId + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + pinId + ')">');
+            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><button onclick="confirmBookmarkFlg(' + pinId + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinId + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + pinId + ')">');
             markers[pinId] = newPin;
         })
         .catch(function (err) {
