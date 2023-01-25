@@ -28,12 +28,45 @@ function getCurUser() {
 // 処理の一時停止
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// htmlの書き込み
+// htmlの書き込み(全体)
 async function writeHTML(pictureName) {
     var htmlPictureLists = '';  // html表示用
     // html作成
     if (pictureName == "") {
         htmlPictureLists += '<ul><li class="nopicturelist">まだ登録されていません！</li></ul>';
+        document.getElementById('body').innerHTML = htmlPictureLists;
+    } else {
+        // 画像の表示場所
+        for(var k = 0; k < pictureName.length; k++){
+            htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src=""></img>';
+        }
+        document.getElementById('body').innerHTML = htmlPictureLists;
+        console.log(htmlPictureLists);
+        // 画像のダウンロード
+        for (var i = 0; i < pictureName.length; i++) {
+            await ncmb.File.download(pictureName[i], "blob")
+                .then(function (fileData) {
+                    var pictureId = 'picture' + i;
+                    console.log(pictureId);
+                    reader.onload = function (e) {
+                        var dataUrl = reader.result;
+                        document.getElementById(pictureId).src = dataUrl;
+                    }
+                    reader.readAsDataURL(fileData);
+                })
+                .catch(function (e) {
+                    window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                    document.location.href = 'index.html';
+                });
+        }
+    }
+}
+// htmlの書き込み(選んだピン)
+async function writeHTML(pictureName, pinName) {
+    var htmlPictureLists = '<ul><li>' + pinName + '</li>';  // html表示用
+    // html作成
+    if (pictureName == "") {
+        htmlPictureLists += '<li class="nopicturelist">まだ登録されていません！</li></ul>';
         document.getElementById('body').innerHTML = htmlPictureLists;
     } else {
         // 画像の表示場所
@@ -68,13 +101,37 @@ window.onload = async function getPictureList() {
     var nowUserName = await getCurUser();
     var pictureNames = [];  // 写真の名前
     console.log(nowUserName);
+    // クエリストリングの処理
     var query = new URLSearchParams(window.location.search);
-    var pinId = query.get('pinId');
-    console.log("pinId:" + pinId);
-    if (undefined == null || pinId == undefined) {
+    var queryPinId = query.get('pinId');
+    console.log("queryPinId:" + queryPinId);
+    console.log('型:' + typeof queryPinId);
+    if(queryPinId === 'undefined') {
+        console.log('変換なし');
+    } else {
+        var pinId = parseInt(queryPinId);
+        console.log('変換後:' + typeof pinId);
+    }
+    // 変換処理されたかどうかで分岐
+    if (typeof pinId === 'number') {
+        console.log('pinIdあり');
+        console.log('pinId:' + pinId);
+        // ピンの名前を取得
+        var Pin = ncmb.DataStore("pin");
+        await Pin.equalTo("userName", nowUserName)
+            .equalTo("pinID", pinId)
+            .fetch()
+            .then(function(result) {
+                var getPinName = result.pinName;
+                console.log('getPinName:' + getPinName);
+            })
+            .catch(function(err) {
+                console.log('名前取得失敗');
+            });
         // ユーザーの写真を検索(データストア内)
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
+            .equalTo("pinID", pinId)
             .order("pictureId")
             .fetchAll()
             .then(function (result) {
@@ -91,15 +148,12 @@ window.onload = async function getPictureList() {
                 document.location.href = 'index.html';
             });
         // htmlの書き換え
-        await writeHTML(pictureNames);
+        await writeHTML(pictureNames, getPinName);
         console.log('読み込み完了');
-    } else if(pinId != null) {
-        console.log('pinIdあり');
-        console.log('pinId:' + pinId);
+    } else {
         // ユーザーの写真を検索(データストア内)
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
-            .equalTo("pinID", pinId)
             .order("pictureId")
             .fetchAll()
             .then(function (result) {
