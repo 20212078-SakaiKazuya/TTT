@@ -213,15 +213,15 @@
         }
 
         function successCamera(image) {
-            var minlocation = searchMarker();
+            var min = searchMarker();
+            var minlocation = L.marker([min.map.latitude, min.map.longitude]);
+            minlocation = minlocation.getLatLng();
+            console.log(minlocation.lat);
 
-            if (minlocation.getLatLng().distanceTo(marklatlng) <= 50) {
-                minlocation.bindPopup("<div style='width:200px'>" + markinfo[markers.indexOf(minlocation)] + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect();"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
+            if (minlocation.distanceTo(marklatlng) <= 50) {
+                markers[min.pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min.pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min.pinID + ');"></td><td><button onclick="changeBookmarkAlert(' + min.pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min.pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min.pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min.pinID + ')">');
             } else {
-                newPin = L.marker(marklatlng).addTo(mymap);
-                markers.push(newPin);
-                markinfo.push('新規ピン');
-                newPin.bindPopup("<div style='width:200px'>" + '新規ピン' + '</div><br><table><tr><td>アルバム</td><td>' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + markinfo.indexOf('新規ピン') + ');"></td></tr></table><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20">');
+                savePin(marklatlng.lat, marklatlng.lng, image);
 
                 if (minlocation.getLatLng().lat == 0 && minlocation.getLatLng().lng == 0) {
                     minlocation.remove();
@@ -346,17 +346,16 @@
         // 現在地に最も近いマーカーを割り出す
         function searchMarker() {
             try {
-                var example = markers[0].getLatLng().lat;
-                var min = markers[0];
-                for (i = 1; i < markers.length; i++) {
-                    if (min.getLatLng().distanceTo(marklatlng) > markers[i].getLatLng().distanceTo(marklatlng)) {
-                        min = markers[i];
+                var min = Math.abs(pinList[0].map.latitude - marklatlng.lat) + Math.abs(pinList[0].map.longitude - marklatlng.lng);
+                for (i = 1; i < pinList.length; i++) {
+                    var ll = Math.abs(pinList[i].map.latitude - marklatlng.lat) + Math.abs(pinList[i].map.longitude - marklatlng.lng);
+                    if (min > ll) {
+                        min = Math.abs(pinList[i].map.latitude - marklatlng.lat) + Math.abs(pinList[i].map.longitude - marklatlng.lng);
                     }
                 }
             } catch {
-                var min = L.marker([0, 0], {
-                    opacity: 0
-                }).addTo(mymap);
+                var min = 1000; //TODO
+;
             }
             return min;
         }
