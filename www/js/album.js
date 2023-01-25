@@ -68,27 +68,57 @@ window.onload = async function getPictureList() {
     var nowUserName = await getCurUser();
     var pictureNames = [];  // 写真の名前
     console.log(nowUserName);
-    // ユーザーの写真を検索(データストア内)
-    var Picture = ncmb.DataStore("picture");
-    await Picture.equalTo("userName", nowUserName)
-        .order("pictureId")
-        .fetchAll()
-        .then(function (result) {
-            console.log('検索結果: ' + JSON.stringify(result));
-            console.log('件数: ' + result.length);
-            for (var i = 0; i < result.length; i++) {
-                pictureNames[i] = result[i].data;
-            }
-            // デバッグ
-            console.log('pictureNames: ' + pictureNames);
-        })
-        .catch(function (e) {
-            window.alert('エラーが発生しました¥nマップ画面に戻ります');
-            document.location.href = 'index.html';
-        });
-    // htmlの書き換え
-    await writeHTML(pictureNames);
-    console.log('読み込み完了');
+    var query = new URLSearchParams(window.location.search);
+    var pinId = query.get('pinId');
+    console.log("pinId:" + pinId);
+    if (undefined == null || pinId == undefined) {
+        // ユーザーの写真を検索(データストア内)
+        var Picture = ncmb.DataStore("picture");
+        await Picture.equalTo("userName", nowUserName)
+            .order("pictureId")
+            .fetchAll()
+            .then(function (result) {
+                console.log('検索結果: ' + JSON.stringify(result));
+                console.log('件数: ' + result.length);
+                for (var i = 0; i < result.length; i++) {
+                    pictureNames[i] = result[i].data;
+                }
+                // デバッグ
+                console.log('pictureNames: ' + pictureNames);
+            })
+            .catch(function (e) {
+                window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                document.location.href = 'index.html';
+            });
+        // htmlの書き換え
+        await writeHTML(pictureNames);
+        console.log('読み込み完了');
+    } else if(pinId != null) {
+        console.log('pinIdあり');
+        console.log('pinId:' + pinId);
+        // ユーザーの写真を検索(データストア内)
+        var Picture = ncmb.DataStore("picture");
+        await Picture.equalTo("userName", nowUserName)
+            .equalTo("pinID", pinId)
+            .order("pictureId")
+            .fetchAll()
+            .then(function (result) {
+                console.log('検索結果: ' + JSON.stringify(result));
+                console.log('件数: ' + result.length);
+                for (var i = 0; i < result.length; i++) {
+                    pictureNames[i] = result[i].data;
+                }
+                // デバッグ
+                console.log('pictureNames: ' + pictureNames);
+            })
+            .catch(function (e) {
+                window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                document.location.href = 'index.html';
+            });
+        // htmlの書き換え
+        await writeHTML(pictureNames);
+        console.log('読み込み完了');
+    }
     const spinner = document.getElementById('loading');
     spinner.classList.add('loaded');
 }
