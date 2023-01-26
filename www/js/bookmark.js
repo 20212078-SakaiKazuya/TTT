@@ -28,12 +28,12 @@ function getCurUser() {
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // 日付の書式設定
-function settingDay(date){
+function settingDay(date) {
     var getDate; // 引数からの取り出し
     var result; // 切り取り後の日付
     var setDate = [];   // 変換後の日付格納用
     // 日付の切り取り
-    for(var i = 0; i < date.length; i++){
+    for (var i = 0; i < date.length; i++) {
         getDate = date[i];
         result = getDate.slice(0, 10);
         setDate[i] = result;
@@ -42,14 +42,14 @@ function settingDay(date){
 }
 
 // htmlの書き込み
-async function writeHTML(pinName,longitude,latitude,date) {
+async function writeHTML(pinName, longitude, latitude, date) {
     var htmlPinLists = '';  // html表示用
     // html作成
-    if(pinName == "") {
+    if (pinName == "") {
         htmlPinLists += '<li class="nopinlist">まだ登録されていません！</li>';
     } else {
-        for(var i = 0; i < date.length; i++){
-            htmlPinLists += '<li class="pinlist">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + '<br>緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
+        for (var i = 0; i < date.length; i++) {
+            htmlPinLists += '<li class="pinlist" onclick="saveLocalStorage(' + longitude[i] + ',' + latitude[i] + ');">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + '<br>緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
         }
     }
     await console.log(htmlPinLists);
@@ -99,7 +99,7 @@ window.onload = async function getPinList() {
         });
     // htmlの書き換え
     writeHTML(pinNames, long, lat, settingRegistDay);
-    
+
     const spinner = document.getElementById('loading');
     spinner.classList.add('loaded');
 
