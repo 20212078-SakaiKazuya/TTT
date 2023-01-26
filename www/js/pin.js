@@ -18,7 +18,7 @@ function getCurUser() {
         console.log('現在のメールアドレス: ' + currentUserMailAddress);
         console.log('現在のパスワード: ' + currentUserPass);    // デバッグ
     } else {
-        window.alert('エラーが発生しました¥nマップ画面に戻ります'); // FIX ME
+        window.alert('pin.jsでエラーが発生しました¥nマップ画面に戻ります'); // FIX ME
         document.locatin.href = 'index.html';
     }
     return currentUserName;
