@@ -86,6 +86,7 @@ async function trueChangeBookmark(pinId) {
     await Pin.equalTo("pinID", pinID)
     .fetch()
     .then(function(pin) {
+        markers[pinId].setIcon(L.spriteIcon("red"));
         console.log('bookmark_flg:' + pin.bookmark_flg);
         pin.set("bookmark_flg", true);
         console.log('ブックマークフラグの更新成功(true)');
@@ -108,6 +109,7 @@ async function releaseChangeBookmark(pinId) {
     await Pin.equalTo("pinID", pinID)
         .fetch()
         .then(function(pin) {
+            markers[pinId].setIcon(L.spriteIcon());
             console.log('検索結果:' + JSON.stringify(pin));
             console.log('bookmark_flg:' + pin.bookmark_flg);
             pin.set("bookmark_flg", false);

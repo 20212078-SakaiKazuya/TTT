@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data: gap: https://ssl.gstatic.com; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <!-- ページタイトル -->
-    <title>オリジナルマップの作成</title>
+    <title>Tenki and Album Application</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/drawer.css" />
     <link rel="stylesheet" href="css/transition.css" />
@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
     <!-- leaflet.js -->
     <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="js/leaflet.sprite.js"></script>
     <!-- ニフクラ -->
     <script src="components/loader.js"></script>
     <script>
@@ -163,6 +164,7 @@
             iconAnchor: [15, 15],
             popupAnchor: [0, -50],
         });
+        L.Icon.Default.imagePath = 'https://unpkg.com/leaflet@1.3.1/dist/images/';
 
         /* 緯度・経度と倍率の指定 */
         function onLocationFound(e) {
@@ -216,13 +218,11 @@
             var min = searchMarker();
             var imgData = toBlob(image, 'image/png');
             getPictMac(imgData);
-            console.log('through');
 
             if (min[0] <= 50) {
                 markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
             } else {
                 savePin(marklatlng.lat, marklatlng.lng, image);
-                console.log('complete: savePin');
                 savePicture();
             }
         }
@@ -269,7 +269,11 @@
 
         function pinInstall() {
             for (i = 0; i < pinList.length; i++) {
-                newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude]).addTo(mymap);
+                if (pinList[i].bookmark_flg == false) {
+                    newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude]).addTo(mymap);
+                } else {
+                    newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude], {icon: L.spriteIcon('red')}).addTo(mymap);
+                }
                 var pinid = pinList[i].pinID;
 
                 markers[pinid] = newPin;

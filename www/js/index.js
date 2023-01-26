@@ -64,7 +64,6 @@ window.onload = function () {
 
 // 画像のアップロード
 function getPictMac(imageData) {
-    console.log('getPictMac');
     var picture = ncmb.DataStore("picture");
     picture.order('pictureID', true)
         .fetchAll()
@@ -74,14 +73,10 @@ function getPictMac(imageData) {
 }
 
 function imgUpload(imageData, pictid) {
-    // ncmbに画像をアップロード
-    console.log('imgUpload');
     var fileName = 'image' + pictid + ".png";
     var fileData = imageData;
     ncmb.File.upload(fileName, fileData)
-        .then(function (re) {
-            console.log('success');
-        })
+        .then(function (re) {})
         .catch(function (er) {
             console.log('error' + er);
         });
