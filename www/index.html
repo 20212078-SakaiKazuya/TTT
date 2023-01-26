@@ -74,47 +74,6 @@
                     resultData(result[0].pinID, result[0].data, result.length);
                 });
         }
-
-        function getPictMac(imageData) {
-            console.log('getPictMac');
-            var picture = ncmb.DataStore("picture");
-            picture.order('pictureID', true)
-                .fetchAll()
-                .then(function(result) {
-                    imgUpload(imageData, result[0].pictureID + 1);
-                });
-        }
-
-        function imgUpload(imageData, pictid) {
-            // ncmbに画像をアップロード
-            console.log('imgUpload');
-            var fileName = 'image' + pictid + ".png";
-            var fileData = imageData;
-            ncmb.File.upload(fileName, fileData)
-                .then(function(re) {
-                    console.log('success');
-                })
-                .catch(function(er) {
-                    console.log('error' + er);
-                });
-        }
-
-        function toBlob(base64, mime_type) {
-            var bin = atob(base64.replace(/^.*,/, ''));
-            var buffer = new Uint8Array(bin.length);
-            for (var i = 0; i < bin.length; i++) {
-                buffer[i] = bin.charCodeAt(i);
-            }
-
-            try {
-                var blob = new Blob([buffer.buffer], {
-                    type: mime_type
-                });
-            } catch (e) {
-                return false;
-            }
-            return blob;
-        }
     </script>
 
 </head>
@@ -260,9 +219,11 @@
             console.log('through');
 
             if (min[0] <= 50) {
-                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><button onclick="confirmBookmarkFlg(' + min[1].pinID + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
+                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
             } else {
                 savePin(marklatlng.lat, marklatlng.lng, image);
+                console.log('complete: savePin');
+                savePicture();
             }
         }
 
@@ -316,7 +277,7 @@
 
                 var id = "'" + userId + "'";
 
-                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><button onclick="confirmBookmarkFlg(' + pinid + ');">★</button></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + pinid + ')">');
+                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinid + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><img src="' + 'images/white.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + pinid + ')">');
             }
         }
 

@@ -57,7 +57,49 @@ window.addEventListener('load', function () {
 
 
 // htmlの書き換え
-    window.onload = function() {
-  const spinner = document.getElementById('loading');
-  spinner.classList.add('loaded');
+window.onload = function () {
+    const spinner = document.getElementById('loading');
+    spinner.classList.add('loaded');
+}
+
+// 画像のアップロード
+function getPictMac(imageData) {
+    console.log('getPictMac');
+    var picture = ncmb.DataStore("picture");
+    picture.order('pictureID', true)
+        .fetchAll()
+        .then(function (result) {
+            imgUpload(imageData, result[0].pictureID + 1);
+        });
+}
+
+function imgUpload(imageData, pictid) {
+    // ncmbに画像をアップロード
+    console.log('imgUpload');
+    var fileName = 'image' + pictid + ".png";
+    var fileData = imageData;
+    ncmb.File.upload(fileName, fileData)
+        .then(function (re) {
+            console.log('success');
+        })
+        .catch(function (er) {
+            console.log('error' + er);
+        });
+}
+
+function toBlob(base64, mime_type) {
+    var bin = atob(base64.replace(/^.*,/, ''));
+    var buffer = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) {
+        buffer[i] = bin.charCodeAt(i);
+    }
+
+    try {
+        var blob = new Blob([buffer.buffer], {
+            type: mime_type
+        });
+    } catch (e) {
+        return false;
+    }
+    return blob;
 }
