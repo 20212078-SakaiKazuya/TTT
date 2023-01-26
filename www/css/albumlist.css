@@ -39,7 +39,11 @@ table{
 li{
     font-family: 'Kosugi', sans-serif;
 }
+.pinname{
+    margin: 8.5px;
+}
 .nopicturelist{
+    margin: 20px;
     list-style: none;
 }
 .picturelist{
