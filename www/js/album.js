@@ -37,7 +37,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
     var htmlPictureLists = "";
     await wait(1000);
     // ピンの名前を確認
-    if (pinName != "" || pinName.length != 0) {
+    if (pinName != "undefined" && pinName != "") {
         // 名前あり
         htmlPictureLists += '<li class="pinname" onclick="saveLocalStorage(' + longitude + ',' + latitude + ');">' + pinName + '</li>';  // html表示用
         // html作成
@@ -69,7 +69,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
                     });
             }
         }
-    } else {
+    } else if(pinName === 'undefined' || pinName == "") {
         // 名前なし
         htmlPictureLists = "";
         // html作成
@@ -168,6 +168,7 @@ window.onload = async function getPictureList() {
                 document.location.href = 'index.html';
             });
     } else {
+        getPinName = "";
         // ユーザーの写真を検索(データストア内)
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
