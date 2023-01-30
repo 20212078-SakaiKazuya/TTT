@@ -75,6 +75,24 @@
                     resultData(result[0].pinID, result[0].data, result.length);
                 });
         }
+
+        function markerPictCount(pid) {
+            var c = 0;
+            for (i = 0; i < pictureList.length; i++) {
+                if (pictureList[i].pinID == pid) {
+                    c++;
+                }
+            }
+            pictureList = [];
+            picture.equalTo('userName', userId)
+            .fetchAll()
+            .then(function(results) {
+                for (i = 0; i < results.length; i++) {
+                    pictureList.push(results[i]);
+                }
+            });
+            return c + 1;
+        }
     </script>
 
 </head>
@@ -220,10 +238,12 @@
             getPictMac(imgData);
 
             if (min[0] <= 50) {
-                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
+                var cnt = markerPictCount(min[1].pinID);
+                savePicture(min[1].pinID);
+                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + cnt + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
             } else {
                 savePin(marklatlng.lat, marklatlng.lng, image);
-                savePicture();
+                savePicture(-1);
             }
         }
 
@@ -272,7 +292,9 @@
                 if (pinList[i].bookmark_flg == false) {
                     newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude]).addTo(mymap);
                 } else {
-                    newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude], {icon: L.spriteIcon('red')}).addTo(mymap);
+                    newPin = L.marker([pinList[i].map.latitude, pinList[i].map.longitude], {
+                        icon: L.spriteIcon('red')
+                    }).addTo(mymap);
                 }
                 var pinid = pinList[i].pinID;
 
@@ -304,11 +326,17 @@
 
         function pictureSelect(idx) {
             var pictPin = markers[idx];
+            var cnt = markerPictCount(idx);
             var html = pictPin.getPopup().getContent();
             var quote = /\)"><img src="(.*?)"/;
 
             navigator.camera.getPicture(function(pict) {
-                pictPin.bindPopup(html.replace(quote, ')"><img src="data:image/jpeg;base64,' + pict + '"'));
+                var pictData = toBlob(pict, 'image/png');
+                getPictMac(pictData);
+                savePicture(idx);
+                var html = pictPin.getPopup().getContent();
+                var quote = /<td >\d*</;
+                pictPin.bindPopup(html.replace(quote, '<td >' + cnt + '<'));
             }, function() {}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                 destinationType: Camera.DestinationType.DATA_URL

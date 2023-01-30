@@ -133,11 +133,10 @@ async function savePinCreate(latitude, longitude, image) {
 }
 
 // picture
-async function savePicture() {
+async function savePicture(pinId) {
     await wait(1000);   // 1秒待機
     var nowUserName = currentUser;   // ユーザー名
     var pictureId;  // pictureID
-    var pinId;
 
     // クラス定義
     var Picture = ncmb.DataStore("picture");
@@ -163,20 +162,22 @@ async function savePicture() {
             console.log('データなし');
         });
     // pinIDの設定
-    await Pin.exists("userName")
-        .order("pinID")
-        .fetchAll()
-        .then(function (result) {
-            if (result.length == 0) {
-                pinId = 1;
-                console.log('初めての登録');
-            } else {
-                pinId = result[result.length - 1].pinID;
-            }
-        })
-        .catch(function (err) {
-            console.log('データなし');
-        });
+    if (pinId == -1) {
+        await Pin.exists("userName")
+            .order("pinID")
+            .fetchAll()
+            .then(function (result) {
+                if (result.length == 0) {
+                    pinId = 1;
+                    console.log('初めての登録');
+                } else {
+                    pinId = result[result.length - 1].pinID;
+                }
+            })
+            .catch(function (err) {
+                console.log('データなし');
+            });
+    }
     // 写真の保存
     await picture.set("pictureID", pictureId)
         .set("pinID", pinId)
