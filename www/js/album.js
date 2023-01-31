@@ -252,7 +252,7 @@ window.onload = async function getPictureList() {
         // ユーザーの写真を検索
         await Picture.equalTo("userName", nowUserName)
             .equalTo("dis_flg", true)
-            .order("pictureID")
+            .order("pinID")
             .fetchAll()
             .then(function (result) {
                 for (var i = 0; i < result.length; i++) {
