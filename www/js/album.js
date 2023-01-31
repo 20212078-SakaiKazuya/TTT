@@ -37,7 +37,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
     var htmlPictureLists = "";
     await wait(1000);
     // ピンの名前を確認
-    if (pinName != "undefined" && pinName != "") {
+    if (pinName != "" || pinName.length != 0) {
         // 名前あり
         htmlPictureLists += '<li class="pinname" onclick="saveLocalStorage(' + longitude + ',' + latitude + ');">' + pinName + '</li>';  // html表示用
         // html作成
@@ -69,7 +69,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
                     });
             }
         }
-    } else if(pinName === 'undefined' || pinName == "") {
+    } else {
         // 名前なし
         htmlPictureLists = "";
         // html作成
@@ -96,7 +96,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
                         reader.readAsDataURL(fileData);
                     })
                     .catch(function (e) {
-                        window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                        window.alert('エラーが発生しました。マップ画面に戻ります');
                         document.location.href = 'index.html';
                     });
             }
@@ -105,15 +105,45 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
     console.log('html:' + htmlPictureLists);
 }
 
+// 写真のダウンロード
+async function downloadPicture(allPictreName, numberPicture) {
+    var k = 0;      // id設定用
+    var idx = 0;    // 画像判別用
+    for (var i = 0; i < allPictreName.length; i++) {
+        for (var j = 0; j < numberPicture[i]; j++) {
+            if(numberPicture[i] == 0) {
+                break;
+            }
+            await ncmb.File.download(allPictreName[idx], "blob")
+                .then(function (fileData) {
+                    var pictureId = 'picture' + k + j;
+                    console.log('pictureID:' + pictureId);
+                    reader.onload = function (e) {
+                        var dataUrl = reader.result;
+                        document.getElementById(pictureId).src = dataUrl;
+                    }
+                    reader.readAsDataURL(fileData);
+            })
+            .catch (function (err) {
+            console.log('エラー：' + err);
+            window.alert('ダウンロードでエラーが発生しました。マップ画面に戻ります。');
+            document.location.href = 'index.html';
+            });
+            idx++;
+        }
+        k++;
+        console.log('idx:' + idx);
+        console.log('i:' + i);
+    }
+}
+
 // 写真の一覧取得
 window.onload = async function getPictureList() {
     await wait(1000);    // 1秒停止
     var nowUserName = await getCurUser();
+    var htmlString;     // html文
     var pictureNames = [];  // 写真の名前
-    var getPinName;     // ピンの名前を取得
-    var getLongitude;   // 経度
-    var getLatitude;    // 緯度
-    console.log(nowUserName);
+
     // クエリストリングの処理
     var query = new URLSearchParams(window.location.search);
     var queryPinId = query.get('pinId');
@@ -121,12 +151,19 @@ window.onload = async function getPictureList() {
     console.log('型:' + typeof queryPinId);
     if (queryPinId === 'undefined' && pinId == null) {
         console.log('変換なし');
+    } else if (pinId == null && typeof queryPinId == 'number') {
+        console.log('変換なし');
     } else {
         var pinId = parseInt(queryPinId);
         console.log('変換後:' + typeof pinId);
     }
+
     // 変換処理されたかどうかで分岐
     if (typeof pinId === 'number') {
+        // 変換あり
+        var getPinName;     // ピンの名前を取得
+        var getLongitude;   // 経度
+        var getLatitude;    // 緯度
         console.log('pinIdあり');
         console.log('pinId:' + pinId);
         // ピンの名前,緯度,経度を取得
@@ -152,7 +189,7 @@ window.onload = async function getPictureList() {
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
             .equalTo("pinID", pinId)
-            .order("pictureId")
+            .order("pictureID")
             .fetchAll()
             .then(function (result) {
                 console.log('検索結果: ' + JSON.stringify(result));
@@ -167,30 +204,102 @@ window.onload = async function getPictureList() {
                 window.alert('エラーが発生しました¥nマップ画面に戻ります');
                 document.location.href = 'index.html';
             });
+        // htmlの書き換え
+        await writeHTML(pictureNames, getPinName, getLongitude, getLatitude);
+        console.log('読み込み完了');
+
     } else {
-        getPinName = "";
+        // 変換なし
+        var getPinName = [];    // 配列化
+        var getLatitude = [];
+        var getLongitude = [];
+        var getPinID = [];
+        var k = 0;      // 配列識別用
+        var allPictureName = [];    // 表示する全ての写真の名前を格納
+        var numberPicture = [];     // ピンごとの写真の枚数を格納
+        htmlString = "";
+
+        // ピンの情報を全て取得
+        var Pin = ncmb.DataStore("pin");
+        await Pin.equalTo("userName", nowUserName)
+            .order("pinID")
+            .fetchAll()
+            .then(function (result) {
+                console.log('result:' + JSON.stringify(result));
+                for (var i = 0; i < result.length; i++) {
+                    getPinID[i] = result[i].pinID;
+                    getPinName[i] = result[i].pinName;
+                    getLatitude[i] = result[i].map.latitude;
+                    getLongitude[i] = result[i].map.longitude;
+                }
+            })
+            .catch(function (err) {
+                console.log('ピンデータ取得失敗');
+            });
+        console.log('getPinID:' + getPinID);
+        console.log('getPinName:' + getPinName);
+        console.log('getLatitude:' + getLatitude);
+        console.log('getLongitude:' + getLongitude);
         // ユーザーの写真を検索(データストア内)
         var Picture = ncmb.DataStore("picture");
+        // ユーザーの写真を検索
         await Picture.equalTo("userName", nowUserName)
-            .order("pictureId")
+            .order("pictureID")
             .fetchAll()
             .then(function (result) {
-                console.log('検索結果: ' + JSON.stringify(result));
-                console.log('件数: ' + result.length);
                 for (var i = 0; i < result.length; i++) {
-                    pictureNames[i] = result[i].data;
+                    allPictureName[i] = result[i].data;
                 }
-                // デバッグ
-                console.log('pictureNames: ' + pictureNames);
+                console.log('allPictureName:' + allPictureName);
             })
-            .catch(function (e) {
-                window.alert('エラーが発生しました¥nマップ画面に戻ります');
-                document.location.href = 'index.html';
+            .catch(function (err) {
+                console.log('写真全件取得失敗');
             });
+        // ピンごとの写真を検索
+        for (var j = 0; j < getPinID.length; j++) {
+            await Picture.equalTo("userName", nowUserName)
+                .equalTo("pinID", getPinID[j])
+                .order("pictureID")
+                .fetchAll()
+                .then(function (result) {
+                    // 配列の初期化
+                    pictureNames = [result.length];
+                    for (var l = 0; l < result.length; l++) {
+                        pictureNames[l] = result[l].data;
+                    }
+                    // 写真枚数を格納
+                    numberPicture[j] = result.length;
+                    // デバッグ
+                    console.log('検索結果: ' + JSON.stringify(result));
+                    console.log('件数: ' + result.length);
+                    console.log('pictureNames: ' + pictureNames);
+                    console.log('numberPicture:' + numberPicture);
+                })
+                .catch(function (e) {
+                    window.alert('エラーが発生しました¥nマップ画面に戻ります');
+                    document.location.href = 'index.html';
+                });
+            // html作成
+            var htmlPinName = '<li class="pinname" onclick="saveLocalStorage(' + getLongitude[j] + ',' + getLatitude[j] + ');">' + getPinName[j] + '</li>';
+            htmlString += htmlPinName;
+            for (var m = 0; m < pictureNames.length; m++) {
+                if (pictureNames[0] == "" || pictureNames[0].length == 0) {
+                    htmlString += '<li class="nopicturelist">まだ登録されていません！</li>';
+                    break;
+                } else {
+                    htmlString += '<img class="picturelist" id="picture' + k + m + '" src=""></img>';
+                }
+            }
+            htmlString += '<br>';
+            k++;
+        }
+        console.log('html:' + htmlString);
+        // html書き換え
+        document.getElementById('body').innerHTML = htmlString;
+        console.log('書き換え完了');
+        // 画像ダウンロード
+        await downloadPicture(allPictureName, numberPicture);
     }
-    // htmlの書き換え
-    await writeHTML(pictureNames, getPinName, getLongitude, getLatitude);
-    console.log('読み込み完了');
     const spinner = document.getElementById('loading');
     spinner.classList.add('loaded');
 }
