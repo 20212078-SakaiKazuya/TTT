@@ -240,7 +240,7 @@
             if (min[0] <= 50) {
                 var cnt = markerPictCount(min[1].pinID);
                 savePicture(min[1].pinID);
-                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + cnt + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><img src="data:image/jpeg;base64,' + image + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + min[1].pinID + ')">');
+                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + cnt + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><table><tr valign="bottom"><td><img src="data:image/jpeg;base64,' + image + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + min[1].pinID + ')"></td></tr></table>');
             } else {
                 savePin(marklatlng.lat, marklatlng.lng, image);
                 savePicture(-1);
@@ -273,9 +273,9 @@
                                 var dataUrl = reader.result;
                                 var pictPin = markers[pinId];
                                 var html = pictPin.getPopup().getContent();
-                                var quote = /\)"><img src="(.*?)"/;
+                                var quote = /bottom"><td><img src="(.*?)"/;
 
-                                pictPin.bindPopup(html.replace(quote, ')"><img src="' + dataUrl + '"'));
+                                pictPin.bindPopup(html.replace(quote, 'bottom"><td><img src="' + dataUrl + '"'));
 
                                 var html = pictPin.getPopup().getContent();
                                 var quote = /<td >\d*</;
@@ -303,7 +303,7 @@
 
                 var id = "'" + userId + "'";
 
-                newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinList[i].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinid + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><img src="images/spacecat.png' + '" height="100"><span> </span><img src="images/piccount.png" width="20"></div><img src="images/delPinBt.png" width="20" style="margin-left:25%" onclick="confirmPinDelete(' + pinid + ')">');
+                newPin.bindPopup("<div style='width:200px'><table><tr><td>" + pinList[i].pinName + '</td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinid + ');"></td></tr></table></div><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><table><tr valign="bottom"><td><img src="images/spacecat.png' + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + pinid + ')"></td></tr></table>');// TODO tableタグの修正をしてるからほかのとこにも写す
             }
         }
 
@@ -327,8 +327,6 @@
         function pictureSelect(idx) {
             var pictPin = markers[idx];
             var cnt = markerPictCount(idx);
-            var html = pictPin.getPopup().getContent();
-            var quote = /\)"><img src="(.*?)"/;
 
             navigator.camera.getPicture(function(pict) {
                 var pictData = toBlob(pict, 'image/png');

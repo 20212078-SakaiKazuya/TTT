@@ -1,3 +1,7 @@
+body {
+    -webkit-touch-callout:none;
+    -webkit-user-select:none;
+}
 #mymap {
     position:absolute;
     top:0;
