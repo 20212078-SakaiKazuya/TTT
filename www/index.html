@@ -75,24 +75,6 @@
                     resultData(result[0].pinID, result[0].data, result.length);
                 });
         }
-
-        function markerPictCount(pid) {
-            var c = 0;
-            for (i = 0; i < pictureList.length; i++) {
-                if (pictureList[i].pinID == pid) {
-                    c++;
-                }
-            }
-            pictureList = [];
-            picture.equalTo('userName', userId)
-            .fetchAll()
-            .then(function(results) {
-                for (i = 0; i < results.length; i++) {
-                    pictureList.push(results[i]);
-                }
-            });
-            return c + 1;
-        }
     </script>
 
 </head>
@@ -166,6 +148,13 @@
     <script src="js/sweetalert2.js"></script>
     <script src="js/index.js"></script>
     <script>
+        savePicture_flg = false;
+        imgUpload_flg = false;
+        function imgFlg() {
+            if (savePicture_flg == true && imgUpload_flg == true) {
+                window.location.reload();
+            }
+        }
         var mymap = L.map("mymap", {
             zoomControl: false,
             minZoom: 3
@@ -238,9 +227,8 @@
             getPictMac(imgData);
 
             if (min[0] <= 50) {
-                var cnt = markerPictCount(min[1].pinID);
                 savePicture(min[1].pinID);
-                markers[min[1].pinID].bindPopup("<table style='width:200px'><tr><td><div>" + min[1].pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + min[1].pinID + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + min[1].pinID + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + cnt + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + min[1].pinID + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + min[1].pinID + ')"><table><tr valign="bottom"><td><img src="data:image/jpeg;base64,' + image + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + min[1].pinID + ')"></td></tr></table>');
+                setInterval(imgFlg, 500);
             } else {
                 savePin(marklatlng.lat, marklatlng.lng, image);
                 savePicture(-1);
@@ -273,9 +261,9 @@
                                 var dataUrl = reader.result;
                                 var pictPin = markers[pinId];
                                 var html = pictPin.getPopup().getContent();
-                                var quote = /bottom"><td><img src="(.*?)"/;
+                                var quote = /\)"><img src="(.*?)"/;
 
-                                pictPin.bindPopup(html.replace(quote, 'bottom"><td><img src="' + dataUrl + '"'));
+                                pictPin.bindPopup(html.replace(quote, ')"><img src="' + dataUrl + '"'));
 
                                 var html = pictPin.getPopup().getContent();
                                 var quote = /<td >\d*</;
@@ -303,7 +291,7 @@
 
                 var id = "'" + userId + "'";
 
-                newPin.bindPopup("<div style='width:200px'><table><tr><td>" + pinList[i].pinName + '</td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinid + ');"></td></tr></table></div><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinid + ')"><table><tr valign="bottom"><td><img src="images/spacecat.png' + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + pinid + ')"></td></tr></table>');// TODO tableタグの修正をしてるからほかのとこにも写す
+                newPin.bindPopup("<div style='width:200px'><table><tr><td>" + pinList[i].pinName + '</td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinid + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinid + ');"></td></tr></table></div><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinid + ');"></td></tr></table><table><tr valign="bottom"><td onclick="transition(' + "'album.html', " + pinid + ')"><img src="images/spacecat.png' + '" height="100"></td><td onclick="transition(' + "'album.html', " + pinid + ');"><img src="images/piccount.png" width="20"></td></div><td></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + pinid + ')"></td></tr></table>');
             }
         }
 
@@ -326,15 +314,12 @@
 
         function pictureSelect(idx) {
             var pictPin = markers[idx];
-            var cnt = markerPictCount(idx);
 
             navigator.camera.getPicture(function(pict) {
                 var pictData = toBlob(pict, 'image/png');
                 getPictMac(pictData);
                 savePicture(idx);
-                var html = pictPin.getPopup().getContent();
-                var quote = /<td >\d*</;
-                pictPin.bindPopup(html.replace(quote, '<td >' + cnt + '<'));
+                setInterval(imgFlg, 500);
             }, function() {}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                 destinationType: Camera.DestinationType.DATA_URL

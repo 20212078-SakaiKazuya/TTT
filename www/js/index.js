@@ -76,7 +76,9 @@ function imgUpload(imageData, pictid) {
     var fileName = 'image' + pictid + ".png";
     var fileData = imageData;
     ncmb.File.upload(fileName, fileData)
-        .then(function (re) {})
+        .then(function (re) {
+            imgUpload_flg = true;
+        })
         .catch(function (er) {
             console.log('error' + er);
         });

@@ -66,7 +66,7 @@ async function savePinNewer(latitude, longitude) {
 
             newPop.remove();
             var newPin = L.marker([map.latitude, map.longitude]).addTo(mymap);
-            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinId + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinId + ')"><table><tr valign="bottom"><td><img src="' + 'images/white.png' + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + pinId + ')"></td></tr></table>');
+            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinId + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 0 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><table><tr valign="bottom"><td><img src="' + 'images/white.png' + '" height="100"></td><div onclick="transition(' + "'album.html', " + pinId + ')"><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" onclick="confirmPinDelete(' + pinId + ')"></td></tr></table>');
             markers[pinId] = newPin;
         })
         .catch(function (err) {
@@ -123,7 +123,7 @@ async function savePinCreate(latitude, longitude, image) {
             console.log('保存しました');
 
             var newPin = L.marker([map.latitude, map.longitude]).addTo(mymap);
-            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinId + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><div onclick="transition(' + "'album.html', " + pinId + ')"><table><tr valign="bottom"><td><img src="data:image/jpeg;base64,' + image + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" style="margin-left:15%" onclick="confirmPinDelete(' + pinId + ')"></td></tr></table>');
+            newPin.bindPopup("<table style='width:200px'><tr><td><div>" + pinName + '</div></td><td><img src="images/updateNameBt.png" width="20" onclick="pinRename(' + pinId + ');"></td><td><img src="images/star.png" width="20" onclick="confirmBookmarkFlg(' + pinId + ');"></td></tr></table><br><table><tr><td>アルバム</td><td >' + 1 + '</td><td>枚</td><td><img src="images/picbt.png" width="50" style="position:relative;top:2px;" onclick="pictureSelect(' + pinId + ');"></td></tr></table><table><tr valign="bottom"><div onclick="transition(' + "'album.html', " + pinId + ')"><td><img src="data:image/jpeg;base64,' + image + '" height="100"></td><td><img src="images/piccount.png" width="20"></div></td><td><img src="images/delPinBt.png" width="20" style="margin-left:15%" onclick="confirmPinDelete(' + pinId + ')"></td></tr></table>');
             markers[pinId] = newPin;
         })
         .catch(function (err) {
@@ -182,17 +182,17 @@ async function savePicture(pinId) {
     await picture.set("pictureID", pictureId)
         .set("pinID", pinId)
         .set("data", 'image' + pictureId + '.png')
+        .set("dis_flg", true)
         .set("userName", nowUserName)
         .save()
         .then(function (pict) {
             console.log('保存しました');
             console.log('保存内容：' + JSON.stringify(pict));
+            savePicture_flg = true;
         })
         .catch(function (err) {
             console.log('保存されませんでした');
         });
-    
-    // ファイルストアに保存
 
 }
 
