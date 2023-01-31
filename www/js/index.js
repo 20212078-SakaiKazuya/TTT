@@ -57,8 +57,9 @@ window.addEventListener('load', function () {
 
 
 // htmlの書き換え
-window.onload = function () {
+window.onload = async function () {
     const spinner = document.getElementById('loading');
+    await wait(2000);
     spinner.classList.add('loaded');
 }
 
