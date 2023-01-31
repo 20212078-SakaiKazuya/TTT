@@ -29,11 +29,12 @@ function getCurUser() {
 const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 // htmlの書き込み
-async function writeHTML(pictureName, pinName, longitude, latitude) {
+async function writeHTML(pictureName, pinName, longitude, latitude, pictureIDList) {
     console.log('引数1:' + pictureName);
     console.log('引数2:' + pinName);
     console.log('引数3:' + longitude);
     console.log('引数4:' + latitude);
+    console.log('引数5:' + pictureIDList);
     var htmlPictureLists = "";
     await wait(1000);
     // ピンの名前を確認
@@ -47,7 +48,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
         } else {
             // 画像の表示場所
             for (var k = 0; k < pictureName.length; k++) {
-                htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src=""></img>';
+                htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src="" onclick="confirmPictureDelete(' + pictureIDList[k] + ');"></img>';
             }
             document.getElementById('body').innerHTML = htmlPictureLists;
             console.log(htmlPictureLists);
@@ -79,7 +80,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude) {
         } else {
             // 画像の表示場所
             for (var k = 0; k < pictureName.length; k++) {
-                htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src=""></img>';
+                htmlPictureLists += '<img class="picturelist" id="picture' + k + '" src="" onclick="confirmPictureDelete(' + pictureIDList[k] + ');"></img>';
             }
             document.getElementById('body').innerHTML = htmlPictureLists;
             console.log(htmlPictureLists);
@@ -143,6 +144,7 @@ window.onload = async function getPictureList() {
     var nowUserName = await getCurUser();
     var htmlString;     // html文
     var pictureNames = [];  // 写真の名前
+    var pictureIDList = []; // pictureIDの取得
 
     // クエリストリングの処理
     var query = new URLSearchParams(window.location.search);
@@ -170,6 +172,8 @@ window.onload = async function getPictureList() {
         var Pin = ncmb.DataStore("pin");
         await Pin.equalTo("userName", nowUserName)
             .equalTo("pinID", pinId)
+            .equalTo("dis_flg", true)
+            .order("pinID")
             .fetch()
             .then(function (result) {
                 console.log('検索結果:' + JSON.stringify(result));
@@ -189,6 +193,7 @@ window.onload = async function getPictureList() {
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
             .equalTo("pinID", pinId)
+            .equalTo("dis_flg", true)
             .order("pictureID")
             .fetchAll()
             .then(function (result) {
@@ -196,6 +201,7 @@ window.onload = async function getPictureList() {
                 console.log('件数: ' + result.length);
                 for (var i = 0; i < result.length; i++) {
                     pictureNames[i] = result[i].data;
+                    pictureIDList[i] = result[i].pictureID;
                 }
                 // デバッグ
                 console.log('pictureNames: ' + pictureNames);
@@ -205,7 +211,7 @@ window.onload = async function getPictureList() {
                 document.location.href = 'index.html';
             });
         // htmlの書き換え
-        await writeHTML(pictureNames, getPinName, getLongitude, getLatitude);
+        await writeHTML(pictureNames, getPinName, getLongitude, getLatitude, pictureIDList);
         console.log('読み込み完了');
 
     } else {
@@ -222,6 +228,7 @@ window.onload = async function getPictureList() {
         // ピンの情報を全て取得
         var Pin = ncmb.DataStore("pin");
         await Pin.equalTo("userName", nowUserName)
+            .equalTo("dis_flg", true)
             .order("pinID")
             .fetchAll()
             .then(function (result) {
@@ -244,11 +251,13 @@ window.onload = async function getPictureList() {
         var Picture = ncmb.DataStore("picture");
         // ユーザーの写真を検索
         await Picture.equalTo("userName", nowUserName)
+            .equalTo("dis_flg", true)
             .order("pictureID")
             .fetchAll()
             .then(function (result) {
                 for (var i = 0; i < result.length; i++) {
                     allPictureName[i] = result[i].data;
+                    pictureIDList[i] = result[i].pictureID;
                 }
                 console.log('allPictureName:' + allPictureName);
             })
@@ -259,6 +268,7 @@ window.onload = async function getPictureList() {
         for (var j = 0; j < getPinID.length; j++) {
             await Picture.equalTo("userName", nowUserName)
                 .equalTo("pinID", getPinID[j])
+                .equalTo("dis_flg", true)
                 .order("pictureID")
                 .fetchAll()
                 .then(function (result) {
@@ -287,7 +297,7 @@ window.onload = async function getPictureList() {
                     htmlString += '<li class="nopicturelist">まだ登録されていません！</li>';
                     break;
                 } else {
-                    htmlString += '<img class="picturelist" id="picture' + k + m + '" src=""></img>';
+                    htmlString += '<img class="picturelist" id="picture' + k + m + '" src="" onclick="confirmPictureDelete(' + pictureIDList[m] + ');"></img>';
                 }
             }
             htmlString += '<br>';

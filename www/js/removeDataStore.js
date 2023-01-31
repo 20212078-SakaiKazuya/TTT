@@ -49,7 +49,19 @@ async function pinRemove(pinId) {
 }
 
 // 写真の削除
-function pictureDelete(pictureId) {
+async function pictureRemove(pictureId) {
     var pictureID = pictureId;  // pictureID
-
+    // 対象のデータを検索
+    var Picture = ncmb.DataStore("picture");
+    await Picture.equalTo("pictureID", pictureID)
+        .fetch()
+        .then(function (picture) {
+            picture.set("dis_flg", false);
+            return picture.update();
+        })
+        .catch(function (err) {
+            falsePictureDelete();
+            console.log('データが見つかりません');
+        });
+    truePictureDelete();
 }

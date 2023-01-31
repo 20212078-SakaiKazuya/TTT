@@ -318,6 +318,23 @@ function confirmPinDelete(pinId){
             }
         });
 }
+function confirmPictureDelete(pictureId){
+    var pictureID = pictureId;
+    Swal.fire({
+        html: 'この写真を削除しますか？',
+        showCancelButton: 'true'
+        }).then((result) => {
+            if(result.value) {
+                pictureRemove(pictureID);
+            } else {
+                Swal.fire({
+                    html: 'キャンセルしました',
+                    }).then((result) => {
+                        console.log('ピンの削除キャンセル');
+                    });
+            }
+        });
+}
 function truePinDelete() {
     Swal.fire({
         title: '削除しました！',
@@ -329,6 +346,25 @@ function truePinDelete() {
     });
 }
 function falsePinDelete() {
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: '削除をキャンセルしました',
+        icon: 'warning'
+    }).then((result) => {
+        console.log('ピンの削除失敗');
+    });
+}
+function truePictureDelete() {
+    Swal.fire({
+        title: '削除しました！',
+        html: '選択した写真を削除しました',
+        icon: 'success'
+    }).then((result) => {
+        console.log('ピンの削除完了');
+        window.location.reload();
+    });
+}
+function falsePictureDelete() {
     Swal.fire({
         title: 'エラーが発生しました',
         html: '削除をキャンセルしました',
