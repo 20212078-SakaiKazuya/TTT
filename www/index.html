@@ -218,7 +218,8 @@
         function camera() {
             navigator.camera.getPicture(successCamera, errorCamera, {
                 sourceType: Camera.PictureSourceType.CAMERA,
-                destinationType: Camera.DestinationType.DATA_URL
+                destinationType: Camera.DestinationType.DATA_URL,
+                targetWidth: 700
             });
         }
 
@@ -324,7 +325,7 @@
             }, function() {}, {
                 sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
                 destinationType: Camera.DestinationType.DATA_URL,
-                quality: 30
+                targetWidth: 700
             });
         }
 
