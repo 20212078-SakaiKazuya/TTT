@@ -12,13 +12,8 @@ function getCurUser() {
     if (currentUserFlg) {
         var currentUser = ncmb.User.getCurrentUser();
         var currentUserName = currentUser.get("userName");      // 現在のユーザー名
-        var currentUserPass = currentUser.get("password");      // 現在のパスワード
-        var currentUserMailAddress = currentUser.get("mailAddress");    // 現在のメールアドレス
-        console.log('現在のユーザー名: ' + currentUserName);
-        console.log('現在のメールアドレス: ' + currentUserMailAddress);
-        console.log('現在のパスワード: ' + currentUserPass);    // デバッグ
     } else {
-        window.alert('bookmark.jsでエラーが発生しました¥nマップ画面に戻ります'); // FIX ME
+        window.alert('bookmark.jsでエラーが発生しました。マップ画面に戻ります'); 
         document.locatin.href = 'index.html';
     }
     return currentUserName;
@@ -46,13 +41,14 @@ async function writeHTML(pinName, longitude, latitude, date) {
     var htmlPinLists = '';  // html表示用
     // html作成
     if (pinName == "") {
+        // ブックマークが登録されていない時
         htmlPinLists += '<li class="nopinlist">まだ登録されていません！</li>';
     } else {
+        // ブックマークが登録されている時
         for (var i = 0; i < date.length; i++) {
             htmlPinLists += '<li class="pinlist" onclick="saveLocalStorage(' + longitude[i] + ',' + latitude[i] + ');">ピン:' + pinName[i] + '<br>' + '経度:' + longitude[i] + '<br>緯度:' + latitude[i] + '<br>' + '作成日時:' + date[i] + '</li><br>';
         }
     }
-    await console.log(htmlPinLists);
     document.getElementById('bookmarklist').innerHTML = htmlPinLists;
 }
 
@@ -75,8 +71,9 @@ window.onload = async function getPinList() {
         .order("pinId")
         .fetchAll()
         .then(function (result) {
-            console.log('検索結果: ' + JSON.stringify(result));
-            console.log('件数: ' + result.length);
+            // デバッグ用
+            // console.log('検索結果: ' + JSON.stringify(result));
+            // console.log('件数: ' + result.length);
             for (var i = 0; i < result.length; i++) {
                 pinLists[i] = result[i].map;
                 pinNames[i] = result[i].pinName;
@@ -86,21 +83,13 @@ window.onload = async function getPinList() {
             }
             // 日付の切り取り
             settingRegistDay = settingDay(registDay);
-            // デバッグ
-            console.log('pinLists: ' + pinLists);
-            console.log('pinNames: ' + pinNames);
-            console.log('lat: ' + lat);
-            console.log('long: ' + long);
-            console.log('registDay: ' + registDay);
-            console.log('settingRegistDay: ' + settingRegistDay);
         })
         .catch(function (e) {
             pinListError();
         });
     // htmlの書き換え
     writeHTML(pinNames, long, lat, settingRegistDay);
-
+    // 読み込み画面
     const spinner = document.getElementById('loading');
     spinner.classList.add('loaded');
-
 }

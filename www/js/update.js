@@ -11,13 +11,8 @@ var currentUserFlg = user.isCurrentUser();
 if(currentUserFlg){
     var currentUser = ncmb.User.getCurrentUser();
     var currentUserName = currentUser.get("userName");      // 現在のユーザー名
-    var currentUserPass = currentUser.get("password");      // 現在のパスワード
-    var currentUserMailAddress = currentUser.get("mailAddress");    // 現在のメールアドレス
-    console.log('現在のユーザー名: ' + currentUserName);
-    console.log('現在のメールアドレス: ' + currentUserMailAddress);
-    console.log('現在のパスワード: ' + currentUserPass);    // デバッグ
 } else {
-    window.alert('update.jsでエラーが発生しました   マップ画面に戻ります'); // FIX ME
+    window.alert('update.jsでエラーが発生しました。マップ画面に戻ります');
     document.locatin.href = 'index.html';
 }
 
@@ -32,16 +27,15 @@ async function userNameUpdate(){      // ユーザー名変更
     await ncmb.User.equalTo("userName", settingUserName)
              .fetchAll()
              .then(function(result) {
-                 console.log('検索結果: ' + result);
+                // デバッグ
+                // console.log('検索結果: ' + result);
                  if(result.length != 0){
                     getUserName = result[0].userName;
-                    console.log(getUserName);
                  }
              })
             .catch(function(e){
                 errorSettingAlert();
             });
-    console.log(getUserName + " & " + settingUserName); // デバッグ
     // 入力チェック
     if(settingUserName == ""){
         errorName();
@@ -89,7 +83,8 @@ async function userMailaddressUpdate(){       // メールアドレス変更
     await ncmb.User.equalTo("mailAddress", settingUserMailAddress)
              .fetchAll()
              .then(function(result) {
-                 console.log('検索結果: ' + result);
+                // デバッグ
+                // console.log('検索結果: ' + result);
                  if(result.length != 0){
                     getUserMail = result[0].mailAddress;
                     console.log(getUserMail);
@@ -98,7 +93,6 @@ async function userMailaddressUpdate(){       // メールアドレス変更
             .catch(function(e){
                 errorSettingAlert();
             });
-    console.log(getUserMail + " & " + settingUserMailAddress);  // デバッグ
     // 入力チェック
     if(settingUserMailAddress == ""){
         errorMailAddress();

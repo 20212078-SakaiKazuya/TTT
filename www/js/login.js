@@ -19,14 +19,12 @@ function login(){
         ncmb.User.login(user)
             .then(function(data) {
                 // ログイン成功時
-                // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
                 console.log('ログインしました');
                 console.log('ログインユーザー: ' + loginUserName);
                 trueLoginAlert();   // SweetAlert2
             })
             .catch(function(e){
                 // ログイン失敗時
-                // console.log(loginUserName + ' & ' + loginUserPassword);  デバッグ用
                 console.log('ログインに失敗しました');
                 falseLoginAlert();      // SweetAlert2
             });

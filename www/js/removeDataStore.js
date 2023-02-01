@@ -31,13 +31,12 @@ var ncmb = new NCMB(applicationKey, clientKey);
 async function pinRemove(pinId) {
     var pinID = pinId;      // pinID
     // 対象のデータを検索
-    console.log('pinID:' + pinID);
     var Pin = ncmb.DataStore("pin");
     await Pin.equalTo("pinID", pinID)
         .fetch()
         .then(function (pin) {
             // デバッグ
-            console.log('検索結果:' + JSON.stringify(pin));
+            // console.log('検索結果:' + JSON.stringify(pin));
             pin.set("dis_flg", false);
             return pin.update();
         })
