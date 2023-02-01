@@ -21,8 +21,9 @@ function transition(url, pinId) {
     document.getElementById('transform').style.width = "100%";
     setTimeout(transLocation, 200, url, pinId);
 }
+// クエリパラメータアリ
 function transLocation(url, pinId) {
-    window.location.href = url + '?pinId=' + pinId; // クエリパラメータの設定、getParam('pinId');でpinIdをstring型で取得できる。（要int型に変換）
+    window.location.href = url + '?pinId=' + pinId;
 }
 
 // 天気ON/OFF

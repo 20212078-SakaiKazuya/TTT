@@ -9,7 +9,7 @@ var currentUser = ncmb.User.getCurrentUser().get("userName");
 // 処理の一時停止
 // const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-// pin
+// 引数の数で派生
 function savePin(la, lo, im){
     if (arguments.length == 2) {
         savePinNewer(la, lo);
@@ -17,6 +17,7 @@ function savePin(la, lo, im){
         savePinCreate(la, lo, im);
     }
 }
+// 新規作成されたピンの設定
 async function savePinNewer(latitude, longitude) {
     await wait(1000);   // 1秒待機
     var nowUserName = currentUser;   // ユーザー名
@@ -34,19 +35,18 @@ async function savePinNewer(latitude, longitude) {
     var Pin = ncmb.DataStore("pin");
     var pin = new Pin();
 
-    // pinIDの取得,設定 fix
+    // pinIDの取得,設定
     await Pin.exists("userName")
         .order("pinID")
         .fetchAll()
         .then(function (result) {
             if (result.length == 0) {
                 pinId = 1;
-                console.log('初めての登録');
             } else {
                 pinId = result[result.length - 1].pinID + 1;
-                console.log('件数: ' + result.length);
-                console.log('検索結果: ' + JSON.stringify(result));
-                console.log('pinID:' + pinId); // デバッグ
+                // console.log('件数: ' + result.length);
+                // console.log('検索結果: ' + JSON.stringify(result));
+                // console.log('pinID:' + pinId); // デバッグ
             }
         })
         .catch(function (err) {
@@ -75,6 +75,7 @@ async function savePinNewer(latitude, longitude) {
         });
 }
 
+// 近くにピンがない状態で写真を撮ったときに作成されるピンの設定
 async function savePinCreate(latitude, longitude, image) {
     await wait(1000);   // 1秒待機
     var nowUserName = currentUser;   // ユーザー名
@@ -92,19 +93,18 @@ async function savePinCreate(latitude, longitude, image) {
     var Pin = ncmb.DataStore("pin");
     var pin = new Pin();
 
-    // pinIDの取得,設定 fix
+    // pinIDの取得,設定
     await Pin.exists("userName")
         .order("pinID")
         .fetchAll()
         .then(function (result) {
             if (result.length == 0) {
                 pinId = 1;
-                console.log('初めての登録');
             } else {
                 pinId = result[result.length - 1].pinID + 1;
-                console.log('件数: ' + result.length);
-                console.log('検索結果: ' + JSON.stringify(result));
-                console.log('pinID:' + pinId); // デバッグ
+                // console.log('件数: ' + result.length);
+                // console.log('検索結果: ' + JSON.stringify(result));
+                // console.log('pinID:' + pinId); // デバッグ
             }
         })
         .catch(function (err) {
@@ -132,7 +132,7 @@ async function savePinCreate(latitude, longitude, image) {
         });
 }
 
-// picture
+// 画像の保存
 async function savePicture(pinId) {
     await wait(1000);   // 1秒待機
     var nowUserName = currentUser;   // ユーザー名
@@ -195,59 +195,4 @@ async function savePicture(pinId) {
             console.log('保存されませんでした');
         });
 
-}
-
-// album
-async function saveAlbum(latitude, longitude) {
-    await wait(1000);   // 1秒待機
-    var nowUserName = await getCurUser();   // userName
-    var pinId;  // pinID
-    var pictureId;  // pictureID
-    var albumId;    // albumID
-    //var lat = latitude; // 緯度
-    //var long = longitude;   // 経度
-
-    // クラス定義
-    var Pin = ncmb.DataStore("pin");
-    var Picture = ncmb.DataStore("picture");
-    var Album = ncmb.DataStore("album");
-    var album = new Album();
-
-    /* 各IDの設定 */
-    // pinID
-    // 緯度,経度の書式設定
-    var map = long + ',' + lat;
-    // pinIDの設定
-    await Pin.equalTo("map", map)   // fix
-        .fetchAll()
-        .then(function(result) {
-            pinId = result[0].pinID;
-            // デバッグ
-            console.log('pinID: ' + pinId);
-        })
-        .catch(function(err) {
-            console.log('データなし');
-        });
-        
-    // pictureID
-
-    // albumID
-    await Album.equalTo("userName", nowUserName)
-        .fetchAll()
-        .then(function(result) {
-            if(result.length == 0) {
-                albumId = 0;
-                console.log('初めての登録');
-            } else {
-                albumId = result[result.length - 1].albumID + 1;
-                // デバッグ
-                console.log('検索結果: ' + JSON.stringify(result));
-                console.log('albumID: ' + albumId);
-            }
-        })
-        .catch(function(err) {
-            console.log('データなし');
-        });
-
-        
 }

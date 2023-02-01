@@ -28,13 +28,11 @@
         var album = ncmb.DataStore("alubum");
         var picture = ncmb.DataStore("picture");
         var pinList = [];
-        var albumList = [];
         var pictureList = [];
         var userId;
         // ユーザー情報取得
         var currentUser = ncmb.User.getCurrentUser();
         if (currentUser) {
-            console.log("ログイン中のユーザーID：" + currentUser.get("userName"));
             userId = currentUser.get("userName"); // ログインしているユーザーIDの取得
         } else {
             console.log("未ログインまたは取得に失敗");
@@ -58,15 +56,7 @@
                     pictureList.push(results[i]);
                 }
             });
-        // ユーザーのアルバムを取得
-        album.equalTo('userName', userId)
-            .fetchAll()
-            .then(function(results) {
-                for (i = 0; i < results.length; i++) {
-                    albumList.push(results[i]);
-                }
-            });
-
+        // ピンの画像一覧を取得
         function getPict(pid) {
             var picture = ncmb.DataStore("picture");
             picture.equalTo('pinID', pid)
@@ -81,6 +71,7 @@
 </head>
 
 <body>
+    <!-- ロード画面 -->
     <div id="loading">
         <div class="sk-chase">
             <div class="sk-chase-dot"><img id="indian2" src="images/indian.png"></div>
@@ -151,11 +142,14 @@
     <script>
         savePicture_flg = false;
         imgUpload_flg = false;
+        // 画像リストとファイルストアに登録したらリロードする
         function imgFlg() {
             if (savePicture_flg == true && imgUpload_flg == true) {
                 window.location.reload();
             }
         }
+
+        // マップ画面
         var mymap = L.map("mymap", {
             zoomControl: false,
             minZoom: 3
@@ -194,6 +188,7 @@
             }
         }
 
+        // 毎秒現在地の更新
         function start() {
             setInterval(locat, 1000);
         }
@@ -207,14 +202,14 @@
 
         window.addEventListener('load', start);
 
-        function onLocationError(e) {}
         mymap.on('locationfound', onLocationFound);
-        mymap.on('locationerror', onLocationError);
 
+        // 現在位置に視点を戻す
         function currentLocation() {
             mymap.setView(marklatlng, 18);
         }
 
+        // 直接写真を撮った時
         function camera() {
             navigator.camera.getPicture(successCamera, errorCamera, {
                 sourceType: Camera.PictureSourceType.CAMERA,
@@ -241,10 +236,6 @@
             return 'error';
         }
 
-        function errorCamera() {
-            return 'error';
-        }
-
 
         /* 地図タイルとクレジット表示 */
         L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -253,7 +244,7 @@
             maxNativeZoom: 16
         }).addTo(mymap);
 
-
+        // ピンのポップアップの中身を設定
         function resultData(pinId, name, count) {
             for (i = 0; i < pinList.length; i++) {
                 if (pinList[i].pinID == pinId) {
@@ -277,6 +268,7 @@
             }
         }
 
+        // ピンをマップにロードする
         function pinInstall() {
             for (i = 0; i < pinList.length; i++) {
                 if (pinList[i].bookmark_flg == false) {
@@ -301,6 +293,7 @@
         var popup = L.popup();
         var chk = false;
 
+        // タップした地点に新規ピン作成のポップアップを表示
         function onMapClick(e) {
             if (!chk) {
                 newPop = popup.setLatLng(e.latlng).setContent(
@@ -314,6 +307,7 @@
 
         var click = mymap.on('click', onMapClick);
 
+        // ピンに画像を設定
         function pictureSelect(idx) {
             var pictPin = markers[idx];
 
@@ -329,6 +323,7 @@
             });
         }
 
+        // タップした地点の天気を表示
         mymap.on('popupopen', function() {
             chk = true;
             if (tenkiChk) {
@@ -381,14 +376,15 @@
             return [min, minlocation];
         }
 
+        // ローカルストレージに保存されていた地点に視点移動
         if (localStorage.getItem('latitude') != null) {
             var la = localStorage.getItem('latitude');
             var ln = localStorage.getItem('longitude');
             mymap.setView([la, ln], 18);
         }
 
+        // 2点間の距離(m)
         const R = Math.PI / 180;
-
         function distance(lat1, lng1, lat2, lng2) {
             lat1 *= R;
             lng1 *= R;
