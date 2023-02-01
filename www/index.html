@@ -70,6 +70,7 @@
         function getPict(pid) {
             var picture = ncmb.DataStore("picture");
             picture.equalTo('pinID', pid)
+                .equalTo('dis_flg', true)
                 .fetchAll()
                 .then(function(result) {
                     resultData(result[0].pinID, result[0].data, result.length);
