@@ -191,6 +191,7 @@ async function savePicture(pinId) {
             savePicture_flg = true;
         })
         .catch(function (err) {
+            console.log('エラー内容：' + err);
             console.log('保存されませんでした');
         });
 

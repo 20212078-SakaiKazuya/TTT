@@ -110,7 +110,7 @@ async function writeHTML(pictureName, pinName, longitude, latitude, pictureIDLis
 async function downloadPicture(allPictreName, numberPicture) {
     var k = 0;      // id設定用
     var idx = 0;    // 画像判別用
-    for (var i = 0; i < allPictreName.length; i++) {
+    for (var i = 0; i < numberPicture.length; i++) {
         for (var j = 0; j < numberPicture[i]; j++) {
             if(numberPicture[i] == 0) {
                 break;
@@ -132,7 +132,8 @@ async function downloadPicture(allPictreName, numberPicture) {
             });
             idx++;
         }
-        k++;
+        await k++;
+        console.log('k:' + k);
         console.log('idx:' + idx);
         console.log('i:' + i);
     }
