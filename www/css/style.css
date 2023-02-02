@@ -109,7 +109,7 @@ body {
   width: 100vw;
   height: 100vh;
   transition: all 1s;
-  background-color: #88BEFE;
+  background-color: #4EFF31;
   position: fixed;
   top: 0;
   left: 0;
@@ -207,7 +207,7 @@ body {
 }
 .updown span:nth-child(5) {
   animation-delay: 0.2s;
-  color: greenyellow;
+  color: rgb(0, 225, 255);
 }
 .updown span:nth-child(6) {
   animation-delay: 0.25s;
