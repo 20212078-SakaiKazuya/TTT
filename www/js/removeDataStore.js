@@ -35,10 +35,7 @@ async function pinRemove(pinId) {
     await Pin.equalTo("pinID", pinID)
         .fetch()
         .then(function (pin) {
-            // デバッグ
-            // console.log('検索結果:' + JSON.stringify(pin));
-            pin.set("dis_flg", false);
-            return pin.update();
+            pin.delete();
         })
         .catch(function (err) {
             falsePinDelete();
@@ -55,8 +52,7 @@ async function pictureRemove(pictureId) {
     await Picture.equalTo("pictureID", pictureID)
         .fetch()
         .then(function (picture) {
-            picture.set("dis_flg", false);
-            return picture.update();
+            picture.delete();
         })
         .catch(function (err) {
             falsePictureDelete();

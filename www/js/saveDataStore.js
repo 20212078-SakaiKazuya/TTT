@@ -26,7 +26,6 @@ async function savePinNewer(latitude, longitude) {
     var pinLong = longitude; // 経度
     var pinId;  // pinID
     var bookmark_flg = false;  // ブックマークフラグ
-    var dis_flg = true;     // 表示するかしないか
 
     // 緯度,経度の書式設定
     var map = {"__type":"GeoPoint","longitude":pinLong,"latitude":pinLat};
@@ -55,7 +54,6 @@ async function savePinNewer(latitude, longitude) {
     // データクラスに保存
     await pin.set("pinID", pinId)
         .set("bookmark_flg", bookmark_flg)
-        .set("dis_flg", dis_flg)
         .set("pinName", pinName)
         .set("map", map)
         .set("userName", nowUserName)
@@ -84,7 +82,6 @@ async function savePinCreate(latitude, longitude, image) {
     var pinLong = longitude; // 経度
     var pinId;  // pinID
     var bookmark_flg = false;  // ブックマークフラグ
-    var dis_flg = true;     // 表示するかしないか
 
     // 緯度,経度の書式設定
     var map = {"__type":"GeoPoint","longitude":pinLong,"latitude":pinLat};
@@ -113,7 +110,6 @@ async function savePinCreate(latitude, longitude, image) {
     // データクラスに保存
     await pin.set("pinID", pinId)
         .set("bookmark_flg", bookmark_flg)
-        .set("dis_flg", dis_flg)
         .set("pinName", pinName)
         .set("map", map)
         .set("userName", nowUserName)
@@ -182,7 +178,6 @@ async function savePicture(pinId) {
     await picture.set("pictureID", pictureId)
         .set("pinID", pinId)
         .set("data", 'image' + pictureId + '.png')
-        .set("dis_flg", true)
         .set("userName", nowUserName)
         .save()
         .then(function (pict) {

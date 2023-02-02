@@ -166,7 +166,6 @@ window.onload = async function getPictureList() {
         var Pin = ncmb.DataStore("pin");
         await Pin.equalTo("userName", nowUserName)
             .equalTo("pinID", pinId)
-            .equalTo("dis_flg", true)
             .order("pinID")
             .fetch()
             .then(function (result) {
@@ -183,7 +182,6 @@ window.onload = async function getPictureList() {
         var Picture = ncmb.DataStore("picture");
         await Picture.equalTo("userName", nowUserName)
             .equalTo("pinID", pinId)
-            .equalTo("dis_flg", true)
             .order("pictureID")
             .fetchAll()
             .then(function (result) {
@@ -217,7 +215,6 @@ window.onload = async function getPictureList() {
         // ピンの情報を全て取得
         var Pin = ncmb.DataStore("pin");
         await Pin.equalTo("userName", nowUserName)
-            .equalTo("dis_flg", true)
             .order("pinID")
             .fetchAll()
             .then(function (result) {
@@ -236,7 +233,6 @@ window.onload = async function getPictureList() {
         var Picture = ncmb.DataStore("picture");
         // ユーザーの写真を全件取得
         await Picture.equalTo("userName", nowUserName)
-            .equalTo("dis_flg", true)
             .order("pinID")
             .fetchAll()
             .then(function (result) {
@@ -252,7 +248,6 @@ window.onload = async function getPictureList() {
         for (var j = 0; j < getPinID.length; j++) {
             await Picture.equalTo("userName", nowUserName)
                 .equalTo("pinID", getPinID[j])
-                .equalTo("dis_flg", true)
                 .order("pictureID")
                 .fetchAll()
                 .then(function (result) {

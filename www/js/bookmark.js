@@ -67,7 +67,6 @@ window.onload = async function getPinList() {
     var Pin = ncmb.DataStore("pin");
     await Pin.equalTo("userName", nowUserName)
         .equalTo("bookmark_flg", true)
-        .equalTo("dis_flg", true)
         .order("pinId")
         .fetchAll()
         .then(function (result) {
