@@ -30,6 +30,8 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 // ピンの名前変更
 async function pinRenameReceive(pinId, newPinName) {
     var pinID = pinId;          // pinID
+    var pinLongitude;       // 経度
+    var pinLatitude;        // 緯度
     // 新しい名前が入力された時、ピンの名前を変更する
     if (newPinName.length != 0) {
         var Pin = ncmb.DataStore("pin");
@@ -37,6 +39,9 @@ async function pinRenameReceive(pinId, newPinName) {
         await Pin.equalTo("pinID", pinID)
             .fetch()
             .then(function(pin) {
+                // 緯度、経度取得
+                pinLatitude = pin.map.latitude;
+                pinLongitude = pin.map.longitude;
                 pin.set("pinName", newPinName);
                 return pin.update();
             })
@@ -45,7 +50,7 @@ async function pinRenameReceive(pinId, newPinName) {
             });
         // デバッグ
         // console.log('実行結果:' + JSON.stringify(pin));
-        resultPinReName();
+        resultPinReName(pinLongitude, pinLatitude);
     }
 
 }

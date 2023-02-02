@@ -264,14 +264,15 @@ function changeReleaseBookmarkAlert(pinId) {
         }
     });
 }
-function resultPinReName() {
+function resultPinReName(longitude, latitude) {
     Swal.fire({
         title: '更新しました！',
         html: 'ピンの名前を変更しました',
         icon: 'success'
     }).then((result) => {
         console.log('ピンの名前の変更完了');
-        window.location.reload();
+        saveLocalStorage(longitude, latitude);
+        // window.location.reload();
     });
 }
 function trueBookmark() {
