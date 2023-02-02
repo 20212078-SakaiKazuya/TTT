@@ -58,5 +58,6 @@ async function pictureRemove(pictureId) {
             falsePictureDelete();
             console.log('データが見つかりません');
         });
+    ncmb.File.delete("image" + pictureID + ".png");
     truePictureDelete();
 }
