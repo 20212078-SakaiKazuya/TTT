@@ -213,6 +213,33 @@ function pinListError(){
     });
 }
 
+// saveDataStore.jsで使用
+function uploadPicture(){
+    Swal.fire({
+        title: '保存中',
+        html: 'しばらくお待ちください…',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+function tureSavePicture(){
+    Swal.fire({
+        title: '保存しました！',
+        html: '写真を保存しました',
+        icon: 'success'
+    });
+}
+function falseSavePicture(){
+    Swal.fire({
+        title: 'エラーが発生しました',
+        html: '保存をキャンセルしました',
+        icon: 'warning'
+    });
+}
+
 // updateDataStore.jsで使用
 function pinRename(pinid){
     Swal.fire({
