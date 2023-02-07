@@ -70,7 +70,6 @@ function getPictMac(imageData) {
     picture.order('pictureID', true)
         .fetchAll()
         .then(function (result) {
-            uploadPicture();
             imgUpload(imageData, result[0].pictureID + 1);
         });
 }
