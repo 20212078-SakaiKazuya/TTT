@@ -32,6 +32,7 @@ async function pinRemove(pinId) {
     var pinID = pinId;      // pinID
     // 対象のデータを検索
     var Pin = ncmb.DataStore("pin");
+    var Picture = ncmb.DataStore("picture");
     await Pin.equalTo("pinID", pinID)
         .fetch()
         .then(function (pin) {
@@ -40,6 +41,18 @@ async function pinRemove(pinId) {
         .catch(function (err) {
             falsePinDelete();
             console.log('データが見つかりません');
+        });
+    await Picture.equalTo("pinID", pinID)
+        .fetchAll()
+        .then(function(pic){
+            for (i = 0; i < pic.length; i++) {
+                var pictureId = pic[i].pictureID;
+                pic[i].delete();
+                ncmb.File.delete("image" + pictureId + ".png");
+            }
+        })
+        .catch(function(err) {
+            console.log(err);
         });
     truePinDelete();
 }
