@@ -42,10 +42,11 @@ async function pinRemove(pinId) {
             falsePinDelete();
             console.log('データが見つかりません');
         });
+    // ピンに紐づいた写真の削除
     await Picture.equalTo("pinID", pinID)
         .fetchAll()
         .then(function(pic){
-            for (i = 0; i < pic.length; i++) {
+            for (var i = 0; i < pic.length; i++) {
                 var pictureId = pic[i].pictureID;
                 pic[i].delete();
                 ncmb.File.delete("image" + pictureId + ".png");
